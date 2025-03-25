@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17479277, g: 0.2186448, b: 0.30092028, a: 1}
+  m_IndirectSpecularColor: {r: 0.17479245, g: 0.2186444, b: 0.30091953, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 207165306}
   - component: {fileID: 207165310}
   - component: {fileID: 207165311}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player (2)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -472,7 +472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 251463378}
   - component: {fileID: 251463379}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: LeftScratchBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 402178373}
   - component: {fileID: 402178377}
   - component: {fileID: 402178378}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player (1)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 746220067}
   - component: {fileID: 746220071}
   - component: {fileID: 746220072}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1194,7 +1194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 954727411}
   - component: {fileID: 954727412}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: BreathBound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1277,7 +1277,7 @@ MonoBehaviour:
   bossMonster: {fileID: 95397136042348654}
   whatIsHit:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 640
 --- !u!4 &974562864
 Transform:
   m_ObjectHideFlags: 0
@@ -1631,7 +1631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1374233530}
   - component: {fileID: 1374233531}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: RightScratchBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1791,7 +1791,7 @@ GameObject:
   - component: {fileID: 1442695322}
   - component: {fileID: 1442695326}
   - component: {fileID: 1442695327}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player (4)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1946,7 +1946,7 @@ GameObject:
   - component: {fileID: 1621400937}
   - component: {fileID: 1621400941}
   - component: {fileID: 1621400942}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player (3)
   m_TagString: Player
   m_Icon: {fileID: 0}

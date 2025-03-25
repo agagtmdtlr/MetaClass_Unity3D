@@ -108,7 +108,6 @@ public class BossMonster : MonoBehaviour
     void StartAttack(AttackType attackType)
     {
         currentAttack = attackType;
-        Debug.Log($"Start Attack = {currentAttack.ToString()}");
         isAttacking = true;
         hittedPlayers.Clear();
         animator.SetTrigger(currentAttack.ToString());
@@ -116,7 +115,6 @@ public class BossMonster : MonoBehaviour
 
     public void EndAttack()
     {
-        Debug.Log($"End Attack = {currentAttack.ToString()}");
         isAttacking = false;
         var weapon = weaponPerType[currentAttack];
         

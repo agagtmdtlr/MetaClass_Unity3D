@@ -36,15 +36,41 @@ public class PlayerCharacter : MonoBehaviour
     private static readonly int ATTACK = Animator.StringToHash("Attack");
     public float Speed = 5.0f;
     Animator animator;
-    
 
-    public void Hit()
+    public void FootR()
+    {
+        
+    }
+
+    public void FootL()
+    {
+        
+    }
+
+    public void EndHit()
     {
         AnimatorStateInfo currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         foreach (var skill in currentState.skills)
         {
             bool isCurrentAttack =currentAnimStateInfo.IsName(skill.type);
-            // 현재 skill에 해당하는 콜라이더를 켜준다.
+            foreach (var hitCollider in skill.colliders)
+            {
+                hitCollider.enabled = false;
+            }
+        }
+    }
+    
+    public void Hit()
+    {
+
+        AnimatorStateInfo currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        foreach (var skill in currentState.skills)
+        {
+            bool isCurrentAttack =currentAnimStateInfo.IsName(skill.type);
+            foreach (var hitCollider in skill.colliders)
+            {
+                hitCollider.enabled = true;
+            }
         }
     }
 
@@ -53,11 +79,53 @@ public class PlayerCharacter : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         OnChangeEquip();
+
+        InitializeClipObjectReference();
+    }
+
+    void InitializeClipObjectReference()
+    {
+        foreach (var clip in equippedState.animatorController.animationClips)
+        {
+            foreach (var evt in clip.events)
+            {
+                evt.functionName = clip.name;
+                evt.objectReferenceParameter = this;
+            }
+            
+            /*if (clip.name.Contains("Attack"))
+            {
+
+                AnimationEvent newEvent = new AnimationEvent();
+                newEvent.functionName = "EndHit";
+                newEvent.time = clip.length / 2f;
+                newEvent.objectReferenceParameter = this;
+                clip.AddEvent(newEvent);
+            }*/
+        }
+        
+        foreach (var clip in unEquippedState.animatorController.animationClips)
+        {
+            foreach (var evt in clip.events)
+            {
+                evt.functionName = clip.name;
+                evt.objectReferenceParameter = this;
+            }
+            
+            /*if (clip.name.Contains("Attack"))
+            {
+                AnimationEvent newEvent = new AnimationEvent();
+                newEvent.functionName = "EndHit";
+                newEvent.time = clip.length;
+                newEvent.objectReferenceParameter = this;
+                clip.AddEvent(newEvent);
+            }*/
+        }
     }
 
     void Update()
     {
-        Move();
+        UpdateMovement();
         UpdateAttackInput();
         UpdateEquipInput();
     }
@@ -116,11 +184,6 @@ public class PlayerCharacter : MonoBehaviour
             if (isAttacking == false) // 첫번째 공격 진입
             {
                 animator.SetTrigger(ATTACK);
-
-                animator.GetCurrentAnimatorClipInfo(0);
-                
-                animator.Play("Attack-1",0,0.0f);
-                
             }
             else
             {
@@ -136,7 +199,7 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
-    private void Move()
+    private void UpdateMovement()
     {
         Vector2 axisInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         

@@ -2484,9 +2484,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5abaaeba7f1792241be358fe4cb53630, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  unEquippedState:
+    animatorController: {fileID: 0}
+    skills: []
+  equippedState:
+    animatorController: {fileID: 0}
+    skills: []
   Speed: 2
-  ReplaceAnimatorController: {fileID: 22100000, guid: 0319f96c9964a0d4982d10875a736275,
-    type: 2}
 --- !u!137 &137382747347945467
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

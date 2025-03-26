@@ -102,7 +102,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -119,4 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c72f473db05c54dab37ca48034fc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  socketTransform: {fileID: 0}
   hitCollider: {fileID: -1151378428449034516}
+  animatorController: {fileID: 0}
+  skills: []

@@ -6,6 +6,20 @@ using Random = UnityEngine.Random;
 
 public class BossMonster : MonoBehaviour
 {
+    public static BossMonster CurrentSceneBossMonster;
+
+    private static Collider[] s_bossMonsterColliders;
+    
+    public static bool IsBossMonster(Collider collider)
+    {
+        for (int i = 0; i < s_bossMonsterColliders.Length; i++ )
+        {
+            if(s_bossMonsterColliders[i] == collider) return true;
+        }
+        
+        return false;
+    }
+    
     // 상태 이벤트 정보를 만들어서 상태의 특정 시점을 지날시 이벤트를 발생시키는 기능
 
     public enum EventType
@@ -44,6 +58,10 @@ public class BossMonster : MonoBehaviour
     {
         breath.gameObject.SetActive(false);
         breath.SetProperty(breathPoint, breathPoint);
+        
+        CurrentSceneBossMonster = this;
+        
+        s_bossMonsterColliders = GetComponentsInChildren<Collider>();
     }
 
     private Animator animator;
@@ -70,6 +88,7 @@ public class BossMonster : MonoBehaviour
             case EventType.OnIdleExit:
                 break;
             case EventType.OnBreathEnter:
+                breath.ResetCollider();
                 breath.gameObject.SetActive(true);
                 break;
             case EventType.OnBreathExit:
@@ -110,7 +129,27 @@ public class BossMonster : MonoBehaviour
         }
         
         previousState = currentState;
-        
-        
+    }
+
+    private int currentHp = 10;
+    private int currentHitCount  = 0;
+    private const int HITCOUNT = 3;
+    public void ChangeHp(int hp)
+    {
+        currentHp += hp;
+        if (currentHp <= 0)
+        {
+            animator.SetTrigger("Death");
+        }
+        else
+        {
+            currentHitCount++;
+            if (currentHitCount >= HITCOUNT)
+            {
+                animator.SetTrigger("Hit");
+                currentHitCount = 0;
+            }
+
+        }
     }
 }

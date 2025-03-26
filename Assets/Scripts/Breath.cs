@@ -9,6 +9,7 @@ public class Breath : MonoBehaviour
     private Transform breathPoint;
     private Transform breathDirection;
     
+    List<Collider> colliders = new List<Collider>();
 
     public void SetProperty(Transform point, Transform worldDir)
     {
@@ -16,7 +17,11 @@ public class Breath : MonoBehaviour
         breathDirection = worldDir;
     }
 
-    
+    public void ResetCollider()
+    {
+        colliders.Clear();
+    }
+     
     private void Update()
     {
         transform.position = breathPoint.position;
@@ -26,9 +31,12 @@ public class Breath : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (colliders.Contains(other)) return;
+        
         CapsuleWarrior warrior = CapsuleWarrior.GetCapsuleWarrior(other);
         if (warrior != null)
         {
+            colliders.Add(other);
             warrior.ChangeHp(-1);
         }
     }

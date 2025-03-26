@@ -13,7 +13,6 @@ public class DummyCharacter : MonoBehaviour
 
     private IEnumerator UpdateHitEffect(GameObject hitEffect)
     {
-        ParticleSystem particle = hitEffect.GetComponent<ParticleSystem>();
         float lifetime =1f;
         while (lifetime > 0.0f)
         {
@@ -25,15 +24,16 @@ public class DummyCharacter : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        Vector3 hitPosition = other.ClosestPoint(transform.position);
-        Vector3 hitNormal = (hitPosition - transform.position).normalized;
-
-        for (int i = 0; i < 1; i++)
+        if(Weapon.IsWeaponCollider(other))
         {
-            GameObject hitEffect = Instantiate(hitEffectPrefab, hitPosition, Quaternion.LookRotation(hitNormal, Vector3.up));
-            StartCoroutine(UpdateHitEffect(hitEffect));
+            Vector3 hitPosition = other.ClosestPoint(transform.position);
+            Vector3 hitNormal = (hitPosition - transform.position).normalized;
+
+            for (int i = 0; i < 1; i++)
+            {
+                GameObject hitEffect = Instantiate(hitEffectPrefab, hitPosition, Quaternion.LookRotation(hitNormal, Vector3.up));
+                StartCoroutine(UpdateHitEffect(hitEffect));
+            }
         }
-        
     }
 }

@@ -4,22 +4,34 @@ using UnityEngine;
 
 public class AttackBehaviour : StateMachineBehaviour
 {
+    private static readonly int ATTACK = Animator.StringToHash("Attack");
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerCharacter>().Hit();
+        PlayerCharacter.CurrentPlayerCharacter.BeginHit();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (animator.IsInTransition(layerIndex)) return;
+        bool isComboLastState = stateInfo.IsName("Attack3");
+        bool inputAttack = Input.GetMouseButtonDown(0);
+            
+        if (!isComboLastState && inputAttack)
+        {
+            float normalizeTime = stateInfo.normalizedTime;
+            if (0.4f < normalizeTime && normalizeTime < 0.85f)
+            {
+                animator.SetTrigger(ATTACK);
+            }
+        }
+    }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<PlayerCharacter>().EndHit();
+        PlayerCharacter.CurrentPlayerCharacter.EndHit();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

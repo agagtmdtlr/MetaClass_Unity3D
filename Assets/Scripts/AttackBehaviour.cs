@@ -9,11 +9,15 @@ public class AttackBehaviour : StateMachineBehaviour
     private static readonly int ATTACK2 = Animator.StringToHash("Attack-2");
     private static readonly int ATTACK3 = Animator.StringToHash("Attack-3");
 
+    public delegate void AttackBehaviourEvent();
+    public event AttackBehaviourEvent beginHitEvent;
+    public event AttackBehaviourEvent endHitEvent;
+
     public bool isComboLastAttack = false;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacter.currentPlayerCharacter.BeginHit();
+        beginHitEvent?.Invoke();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -34,7 +38,7 @@ public class AttackBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacter.currentPlayerCharacter.EndHit();
+        endHitEvent?.Invoke();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

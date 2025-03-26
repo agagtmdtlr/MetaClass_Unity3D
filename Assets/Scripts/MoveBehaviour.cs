@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoveBehaviour : StateMachineBehaviour
 {
+    public Transform target;
     public float Speed = 5.0f;
 
     private static readonly int ATTACK = Animator.StringToHash("Attack");
@@ -22,8 +23,6 @@ public class MoveBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerCharacter player  = PlayerCharacter.currentPlayerCharacter;
-        
         Vector2 axisInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         
         float InputSpeed = 1f;
@@ -37,17 +36,13 @@ public class MoveBehaviour : StateMachineBehaviour
         animator.SetFloat(MOVE_X, axisInput.x);
         animator.SetFloat(SPEED, InputSpeed);
 
-        player.transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
+        target.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
         
         if (animator.IsInTransition(0)) return;
 
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             animator.SetTrigger(ATTACK);
-        }
-        else if(Input.GetKeyDown(KeyCode.E))
-        {
-            player.EquipNextWeapon();
         }
     }
 

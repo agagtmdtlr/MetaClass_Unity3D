@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
 {
-    public static PlayerCharacter currentPlayerCharacter;
     Animator animator;
 
     private int currentWeaponIndex = 0;
@@ -13,9 +13,27 @@ public class PlayerCharacter : MonoBehaviour
 
     void Start()
     {
-        currentPlayerCharacter = this;
+        InitializeAnimator();
+    }
+
+    void InitializeAnimator()
+    {
         animator = GetComponent<Animator>();
+
+        var move = animator.GetBehaviour<MoveBehaviour>();
+        move.target = transform;
+        
+        var equip = animator.GetBehaviour<EquipBehaviour>();
+        equip.equipEvent += EquipNextWeapon;
+
+        var attacks = animator.GetBehaviours<AttackBehaviour>();
+        foreach (var attack in attacks)
+        {
+            attack.beginHitEvent += BeginHit;
+            attack.endHitEvent += EndHit;
+        }
         OnChangeEquip();
+        
         InitializeClipObjectReference();
     }
     
@@ -46,10 +64,13 @@ public class PlayerCharacter : MonoBehaviour
         currentWeapon.hitCollider.enabled = false;
     }
     
+    
+    
     public void BeginHit()
     {
         Weapon currentWeapon = weapons[currentWeaponIndex];
         currentWeapon.hitCollider.enabled = true;
+
     }
 
     /// <summary>

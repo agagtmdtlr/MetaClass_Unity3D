@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260f03b7bac95104fa16158824a6c6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isComboLastAttack: 1
 --- !u!1101 &-1286547403650143669
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -350,6 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4373456ffb48ec14d84f3fa8887bb1b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 5
 --- !u!1101 &2301142993433599079
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -541,6 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260f03b7bac95104fa16158824a6c6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isComboLastAttack: 0
 --- !u!1101 &7958098408759802461
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -600,3 +603,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260f03b7bac95104fa16158824a6c6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isComboLastAttack: 0

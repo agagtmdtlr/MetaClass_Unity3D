@@ -5,13 +5,7 @@ using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
 {
-    public static PlayerCharacter CurrentPlayerCharacter;
-
-    public Transform weaponSocket;
-    private bool equipped = false;
-    
-    private static readonly int ATTACK = Animator.StringToHash("Attack");
-    public float Speed = 5.0f;
+    public static PlayerCharacter currentPlayerCharacter;
     Animator animator;
 
     private int currentWeaponIndex = 0;
@@ -19,30 +13,26 @@ public class PlayerCharacter : MonoBehaviour
 
     void Start()
     {
-        CurrentPlayerCharacter = this;
+        currentPlayerCharacter = this;
         animator = GetComponent<Animator>();
         OnChangeEquip();
-
         InitializeClipObjectReference();
     }
     
-    void Update()
+    public void EquipNextWeapon()
     {
-        UpdateEquipInput();
-    }
-
-    private void UpdateEquipInput()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            equipped  = !equipped;
-            OnChangeEquip();
-        }
+        Weapon currentWeapon = weapons[currentWeaponIndex];
+        currentWeapon.gameObject.SetActive(false);
+        
+        currentWeaponIndex++;
+        currentWeaponIndex = currentWeaponIndex % weapons.Length;
+        OnChangeEquip();
     }
     
     private void OnChangeEquip()
     {
         Weapon currentWeapon = weapons[currentWeaponIndex];
+        currentWeapon.gameObject.SetActive(true);
         animator.runtimeAnimatorController = currentWeapon.animatorController;
         foreach (var skill in currentWeapon.skills)
         {
@@ -50,23 +40,20 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
-
     public void EndHit()
     {
-        AnimatorStateInfo currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         Weapon currentWeapon = weapons[currentWeaponIndex];
-        currentWeapon.hitCollider.enabled = true;
+        currentWeapon.hitCollider.enabled = false;
     }
     
     public void BeginHit()
     {
-        AnimatorStateInfo currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         Weapon currentWeapon = weapons[currentWeaponIndex];
-        currentWeapon.hitCollider.enabled = false;
+        currentWeapon.hitCollider.enabled = true;
     }
 
     /// <summary>
-    /// clip event 호출 에러 메시지 없애기 위한 이벤트 및 초기화 함수
+    /// clip event 호출 에러 메시지 없애기 위한 임시 이벤트 및 초기화 함수
     /// </summary>
     public void Hit()
     {
@@ -74,15 +61,12 @@ public class PlayerCharacter : MonoBehaviour
     
     public void FootR()
     {
-        
     }
 
     public void FootL()
     {
-        
     }
     
-   
     void InitializeClipObjectReference()
     {
         foreach (var weapon in weapons)

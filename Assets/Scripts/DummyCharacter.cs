@@ -6,9 +6,8 @@ using UnityEngine;
 
 public class DummyCharacter : MonoBehaviour
 {
-    
+    public Collider dummyCollider;
     public GameObject hitEffectPrefab;
-    
     List<GameObject> hitEffects = new List<GameObject>();
 
     private IEnumerator UpdateHitEffect(GameObject hitEffect)
@@ -24,9 +23,11 @@ public class DummyCharacter : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("OnTriggerEnter");
         if(Weapon.IsWeaponCollider(other))
         {
             Vector3 hitPosition = other.ClosestPoint(transform.position);
+            hitPosition = dummyCollider.ClosestPoint(hitPosition);
             Vector3 hitNormal = (hitPosition - transform.position).normalized;
 
             for (int i = 0; i < 1; i++)

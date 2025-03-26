@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class MouseRayController : MonoBehaviour
 {
-    public Player[] players;
     public BossMonster bossMonster;
     public LayerMask whatIsHit;
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            Player[] players = FindObjectsByType<Player>(FindObjectsSortMode.None);
+            
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if( Physics.Raycast(ray,out RaycastHit hitInfo,float.MaxValue, whatIsHit) )
             {

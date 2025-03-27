@@ -55,6 +55,10 @@ public class Weapon : MonoBehaviour
     {
         s_hitColliderListOnScene.Remove(hitCollider);
     }
+    
+    List<Vector3> lerpPosition = new List<Vector3>();
+    List<Vector3> lerpDirection = new List<Vector3>();
+    float lastTime = 0;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -68,8 +72,11 @@ public class Weapon : MonoBehaviour
             for (int i = 0; i < 10; i++)
             {
                 float t = (float)(i) / 10;
-                var checkPosition = Vector3.Lerp(prevPosition, curPosition, t);
-                var checkDirection = Vector3.Lerp(prevDirection, curDirection, t);
+                var checkPosition = Vector3.Slerp(prevPosition, curPosition, t);
+                var checkDirection = Vector3.Slerp(prevDirection, curDirection, t);
+                
+                lerpPosition.Add(checkPosition);
+                lerpDirection.Add(checkDirection);
 
                 if (Physics.Raycast(checkPosition, checkDirection, out RaycastHit hit, 10))
                 {
@@ -77,7 +84,25 @@ public class Weapon : MonoBehaviour
                     break;
                 }
             }
-            
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Time.time - lastTime > 2f)
+        {
+            if (lerpPosition.Count > 0)
+            {
+                lerpPosition.RemoveAt(0);
+                lerpDirection.RemoveAt(0);
+                lastTime = Time.time;
+            }
+        }
+
+        Gizmos.color = Color.red;
+        for (int i = 0; i < lerpPosition.Count; i++)
+        {
+            Gizmos.DrawLine(lerpPosition[i], lerpPosition[i] + (lerpDirection[i] * 10) );
         }
         
     }

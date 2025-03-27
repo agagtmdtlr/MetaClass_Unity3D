@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AttackBehaviour : StateMachineBehaviour
 {
+    public string Name;
+    
     private static readonly int ATTACK = Animator.StringToHash("Attack");
     private static readonly int ATTACK1 = Animator.StringToHash("Attack-1");
     private static readonly int ATTACK2 = Animator.StringToHash("Attack-2");
@@ -13,15 +15,20 @@ public class AttackBehaviour : StateMachineBehaviour
     public event AttackBehaviourEvent beginHitEvent;
     public event AttackBehaviourEvent endHitEvent;
 
+    [Range(0,1), SerializeField] public float enableHitBoxTime;
+    bool isTriggeredEnableHitBox = false;
+    
     public bool isComboLastAttack = false;
+    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        beginHitEvent?.Invoke();
+        isTriggeredEnableHitBox = false;
+        Debug.Log($"Enter {Name}");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (animator.IsInTransition(layerIndex)) return;
         bool inputAttack = Input.GetMouseButtonDown(0);
@@ -33,12 +40,29 @@ public class AttackBehaviour : StateMachineBehaviour
                 animator.SetTrigger(ATTACK);
             }
         }
+
+        if (isTriggeredEnableHitBox == false && enableHitBoxTime <= stateInfo.normalizedTime)
+        {
+            beginHitEvent?.Invoke();
+            isTriggeredEnableHitBox = true;
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //endHitEvent?.Invoke();
+        Debug.Log($"Exit {Name}");
+        /*var nextStateInfo = animator.GetNextAnimatorStateInfo(layerIndex);
+        bool toAttackState = IsAttackState(nextStateInfo.shortNameHash);
+        if(toAttackState)
+            endHitEvent?.Invoke();*/
+        
+        endHitEvent?.Invoke();
+    }
+
+    bool IsAttackState(int id)
+    {
+        return id == ATTACK1 || id == ATTACK2 || id == ATTACK3;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

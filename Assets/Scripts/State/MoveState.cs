@@ -14,7 +14,7 @@ public class MoveState : PlayerState
             inputSpeed = 2.0f;
         
         axisInput *= inputSpeed;
-        transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
+        character.transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
     }
 
 }

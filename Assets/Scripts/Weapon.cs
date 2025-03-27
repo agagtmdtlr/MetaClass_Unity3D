@@ -25,6 +25,7 @@ public class Weapon : MonoBehaviour
     {
         public string type;
         public AnimationClip clip;
+        [Range(0,1)] public float enableHitBoxTime;
     }
     
     [Header("Player Animator Controller")]

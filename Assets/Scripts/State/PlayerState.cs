@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class PlayerState : MonoBehaviour
 {
+    
     public enum StateName
     {
         Move,
@@ -12,9 +13,11 @@ public abstract class PlayerState : MonoBehaviour
     
     public abstract StateName stateName { get; }
     protected Animator animator { get; private set; }
-    
+    protected PlayerCharacter character;
+
     public virtual void Initialize(PlayerCharacter character)
     {
+        this.character = character;
         animator = character.GetComponent<Animator>();
     }
 }

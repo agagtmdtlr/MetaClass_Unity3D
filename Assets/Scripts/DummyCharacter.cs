@@ -7,6 +7,15 @@ using UnityEngine;
 
 public class DummyCharacter : MonoBehaviour
 {
+    [System.Serializable]
+    public class Events
+    {
+        public Action<int,int> OnDamage;
+    }
+    
+    public Events Event = new Events();
+    
+    
     static List<Collider> s_dummyColliders = new List<Collider>();
 
     public static bool IsDummyCollider(Collider collider, out DummyCharacter dummy)
@@ -45,6 +54,13 @@ public class DummyCharacter : MonoBehaviour
             yield return null;
         }
         Destroy(hitEffect);
+    }
+
+    public void TakeDamage()
+    {
+        // some hp logic...
+        int curhp = 0, hp = 0;
+        Event.OnDamage?.Invoke(curhp,hp);
     }
 
     public void SpawnHitEffect(Vector3 position, Quaternion rotation)

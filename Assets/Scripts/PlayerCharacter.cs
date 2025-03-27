@@ -8,14 +8,36 @@ public class PlayerCharacter : MonoBehaviour
 {
     Animator animator;
     private int currentWeaponIndex = 0;
-    public Weapon[] weapons;
+    [SerializeField] Weapon[] weapons;
 
-    private readonly Dictionary<PlayerState.StateName, PlayerState> states 
+    private readonly Dictionary<PlayerState.StateName, PlayerState> statesDic 
         = new Dictionary<PlayerState.StateName, PlayerState>();
 
+    PlayerState currentState;
+    public Weapon CurrentWeapon => weapons[currentWeaponIndex];
+    
     void Start()
     {
+        PlayerState[] states = GetComponentsInChildren<PlayerState>(true);
+        foreach (PlayerState state in states)
+        {
+            statesDic[state.stateName] = state;
+            state.Initialize(this);
+        }
+        
+        ChangestState(PlayerState.StateName.Move);
         InitializeAnimator();
+    }
+
+    public void ChangestState(PlayerState.StateName newState)
+    {
+        if (currentState != null)
+        {
+            currentState.gameObject.SetActive(false);
+        }
+        
+        currentState = statesDic[newState];
+        currentState.gameObject.SetActive(true);
     }
 
     void Update()
@@ -30,6 +52,8 @@ public class PlayerCharacter : MonoBehaviour
             EquipNextWeapon();
         }
     }
+
+    private Dictionary<string, AttackBehaviour> attackBehaviours = new Dictionary<string, AttackBehaviour>();
     
     void InitializeAnimator()
     {
@@ -40,6 +64,7 @@ public class PlayerCharacter : MonoBehaviour
         {
             attack.beginHitEvent += BeginHit;
             attack.endHitEvent += EndHit;
+            attackBehaviours[attack.Name] = attack;
         }
         OnChangeEquip();
         
@@ -64,6 +89,7 @@ public class PlayerCharacter : MonoBehaviour
         foreach (var skill in currentWeapon.skills)
         {
             currentWeapon.animatorController[skill.type] = skill.clip;
+            attackBehaviours[skill.type].enableHitBoxTime = skill.enableHitBoxTime;
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -55,10 +56,6 @@ public class Weapon : MonoBehaviour
     private void Update()
     {
         log =  new Log() { pos = transform.position, dir = transform.forward };
-        /*
-        transform.position = socketTransform.position;
-        transform.localScale = socketTransform.localScale;
-        transform.rotation = socketTransform.rotation;*/
     }
 
     private void OnDestroy()
@@ -66,9 +63,7 @@ public class Weapon : MonoBehaviour
         s_hitColliderListOnScene.Remove(hitCollider);
     }
     
-    List<Vector3> lerpPosition = new List<Vector3>();
-    List<Vector3> lerpDirection = new List<Vector3>();
-    float lastTime = 0;
+   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -88,8 +83,7 @@ public class Weapon : MonoBehaviour
                 var checkPosition = Vector3.Slerp(prevPosition, curPosition, t);
                 var checkDirection = Vector3.Slerp(prevDirection, curDirection, t);
                 
-                lerpPosition.Add(checkPosition);
-                lerpDirection.Add(checkDirection);
+                lerpLogs.Add(new Log(){pos = checkPosition, dir = checkDirection});
                 
                 Ray ray = new Ray(checkPosition, checkDirection);
 
@@ -109,23 +103,26 @@ public class Weapon : MonoBehaviour
             dummyCharacter.SpawnHitEffect(point, Quaternion.LookRotation(dir));
         }
     }
-
+    
+    
+    List<Log> lerpLogs = new List<Log>();
+    float lastTime = 0;
     private void OnDrawGizmos()
     {
         if (Time.time - lastTime > 2f)
         {
-            if (lerpPosition.Count > 0)
+            if (lerpLogs.Count > 0)
             {
-                lerpPosition.RemoveAt(0);
-                lerpDirection.RemoveAt(0);
+                lerpLogs.Clear();
                 lastTime = Time.time;
             }
         }
 
         Gizmos.color = Color.red;
-        for (int i = 0; i < lerpPosition.Count; i++)
+        for (int i = 0; i < lerpLogs.Count; i++)
         {
-            Gizmos.DrawLine(lerpPosition[i], lerpPosition[i] + (lerpDirection[i] * 10) );
+            var lg = lerpLogs[i];
+            Gizmos.DrawLine(lg.pos, lg.pos + (lg.dir * 10) );
         }
         
     }

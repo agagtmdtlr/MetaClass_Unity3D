@@ -7,9 +7,11 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
     Animator animator;
-    public float Speed = 5.0f;
     private int currentWeaponIndex = 0;
     public Weapon[] weapons;
+
+    private readonly Dictionary<PlayerState.StateName, PlayerState> states 
+        = new Dictionary<PlayerState.StateName, PlayerState>();
 
     void Start()
     {
@@ -18,19 +20,7 @@ public class PlayerCharacter : MonoBehaviour
 
     void Update()
     {
-        UpdateMove();
         UpdateEquip();
-    }
-
-    void UpdateMove()
-    {
-        Vector2 axisInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        float inputSpeed = 1f;
-        if (Input.GetKey(KeyCode.LeftShift))
-            inputSpeed = 2.0f;
-        
-        axisInput *= inputSpeed;
-        transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
     }
 
     void UpdateEquip()

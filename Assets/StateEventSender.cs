@@ -1,44 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class AttackBehaviour : StateMachineBehaviour
+public class StateEventSender : StateMachineBehaviour
 {
-    private static readonly int ATTACK = Animator.StringToHash("Attack");
-    private static readonly int ATTACK1 = Animator.StringToHash("Attack-1");
-    private static readonly int ATTACK2 = Animator.StringToHash("Attack-2");
-    private static readonly int ATTACK3 = Animator.StringToHash("Attack-3");
+    [Range(0, 1)] public float StartNormalizedTime;
+    private bool isPassStart;
 
-    public delegate void AttackBehaviourEvent();
-    public event AttackBehaviourEvent beginHitEvent;
-    public event AttackBehaviourEvent endHitEvent;
+    [Range(0, 1)] public float EndNormalizedTime; 
+    private bool isPassEnd;
 
-    public bool isComboLastAttack = false;
+    private PlayerCharacter playerCharacter;
+    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        beginHitEvent?.Invoke();
+        playerCharacter = animator.GetComponent<PlayerCharacter>();
+        isPassStart = false;
+        isPassEnd = false;
+        
+        Debug.Log("StateEventSender OnStateEnter");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (animator.IsInTransition(layerIndex)) return;
-        bool inputAttack = Input.GetMouseButtonDown(0);
-        if (!isComboLastAttack && inputAttack)
+        Debug.Log("StateEventSender OnStateUpdate");
+        if (!isPassStart && StartNormalizedTime < stateInfo.normalizedTime)
         {
-            float normalizeTime = stateInfo.normalizedTime;
-            if (0.4f < normalizeTime && normalizeTime < 0.85f)
-            {
-                animator.SetTrigger(ATTACK);
-            }
+            playerCharacter.BeginHit();
+            isPassStart = true;
+        }
+
+        if (!isPassEnd && EndNormalizedTime < stateInfo.normalizedTime)
+        {
+            playerCharacter.EndHit();
+            isPassEnd = true;
         }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //endHitEvent?.Invoke();
+        Debug.Log("StateEventSender OnStateExit");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

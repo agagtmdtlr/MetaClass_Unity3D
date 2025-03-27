@@ -10,8 +10,14 @@ public class Weapon : MonoBehaviour
     public Transform socketTransform;
     public Collider hitCollider;
 
-    public Vector3 prevPosition;
-    public Vector3 prevDirection;
+    struct Log
+    {
+        public Vector3 pos;
+        public Vector3 dir;
+    }
+    
+    List<Log> logs = new List<Log>();
+
     
     [System.Serializable]
     public class Skill
@@ -39,16 +45,20 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         s_hitColliderListOnScene.Add(hitCollider);
+        transform.SetParent(socketTransform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation= Quaternion.identity;
+        transform.localScale = Vector3.one;
     }
 
+    private Log log;
     private void Update()
     {
-        prevPosition = socketTransform.position;
-        prevDirection = socketTransform.forward;
-        
+        log =  new Log() { pos = transform.position, dir = transform.forward };
+        /*
         transform.position = socketTransform.position;
         transform.localScale = socketTransform.localScale;
-        transform.rotation = socketTransform.rotation;
+        transform.rotation = socketTransform.rotation;*/
     }
 
     private void OnDestroy()
@@ -64,12 +74,15 @@ public class Weapon : MonoBehaviour
     {
         if (DummyCharacter.IsDummyCollider(other, out DummyCharacter dummyCharacter))
         {
-            var curPosition = socketTransform.position;
-            var curDirection = socketTransform.forward;
-
-            Debug.Log($"{prevPosition} {curPosition}");
+            hitCollider.enabled = false;
             
-            for (int i = 0; i < 10; i++)
+            var prevPosition = log.pos;
+            var prevDirection  = log.dir;
+                
+            var curPosition = transform.position;
+            var curDirection = transform.forward;
+                
+            for (int i = 0; i <= 10; i++)
             {
                 float t = (float)(i) / 10;
                 var checkPosition = Vector3.Slerp(prevPosition, curPosition, t);
@@ -77,13 +90,23 @@ public class Weapon : MonoBehaviour
                 
                 lerpPosition.Add(checkPosition);
                 lerpDirection.Add(checkDirection);
+                
+                Ray ray = new Ray(checkPosition, checkDirection);
 
-                if (Physics.Raycast(checkPosition, checkDirection, out RaycastHit hit, 10))
+                if( Physics.SphereCast(ray, 0.05f , out RaycastHit hit, 10f))
                 {
-                    dummyCharacter.SpawnHitEffect(hit.point, Quaternion.LookRotation(hit.normal));
-                    break;
+                    if (hit.collider.gameObject == dummyCharacter.gameObject)
+                    {
+                        dummyCharacter.SpawnHitEffect(hit.point, Quaternion.LookRotation(hit.normal));
+                        return;
+                    }
                 }
             }
+            
+            var origin = Vector3.Slerp(prevPosition, curPosition, 0.5f);
+            var point = other.ClosestPoint(origin);
+            var dir =  (origin - point).normalized;
+            dummyCharacter.SpawnHitEffect(point, Quaternion.LookRotation(dir));
         }
     }
 

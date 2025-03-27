@@ -20,6 +20,7 @@ public class Blood : MonoBehaviour
         var material =  materials[materialIndex];
         decal.material = material;
         
+        transform.Rotate(transform.forward, Random.Range(0, 360));
     }
 
     public void SetOpacity(float opacity)

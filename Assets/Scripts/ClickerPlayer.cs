@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class ClickerPlayer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -20,7 +13,7 @@ public class ClickerPlayer : MonoBehaviour
             {
                 if (BossMonster.IsBossMonster(hit.collider))
                 {
-                    BossMonster.CurrentSceneBossMonster.ChangeHp(-1);
+                    BossMonster.CrrentSceneBossMonster.ChangeHp(-1);
                 }
             }
         }

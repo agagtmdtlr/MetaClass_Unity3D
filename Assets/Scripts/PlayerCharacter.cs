@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour
 {
     Animator animator;
-
+    public float Speed = 5.0f;
     private int currentWeaponIndex = 0;
     public Weapon[] weapons;
 
@@ -16,15 +16,34 @@ public class PlayerCharacter : MonoBehaviour
         InitializeAnimator();
     }
 
+    void Update()
+    {
+        UpdateMove();
+        UpdateEquip();
+    }
+
+    void UpdateMove()
+    {
+        Vector2 axisInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        float inputSpeed = 1f;
+        if (Input.GetKey(KeyCode.LeftShift))
+            inputSpeed = 2.0f;
+        
+        axisInput *= inputSpeed;
+        transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
+    }
+
+    void UpdateEquip()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            EquipNextWeapon();
+        }
+    }
+    
     void InitializeAnimator()
     {
         animator = GetComponent<Animator>();
-
-        var move = animator.GetBehaviour<MoveBehaviour>();
-        move.target = transform;
-        
-        var equip = animator.GetBehaviour<EquipBehaviour>();
-        equip.equipEvent += EquipNextWeapon;
 
         var attacks = animator.GetBehaviours<AttackBehaviour>();
         foreach (var attack in attacks)

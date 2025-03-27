@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class MoveBehaviour : StateMachineBehaviour
 {
-    public Transform target;
-    public float Speed = 5.0f;
-
     private static readonly int ATTACK = Animator.StringToHash("Attack");
 
     private static readonly int MOVE_Z = Animator.StringToHash("MoveZ");
@@ -36,8 +33,6 @@ public class MoveBehaviour : StateMachineBehaviour
         animator.SetFloat(MOVE_X, axisInput.x);
         animator.SetFloat(SPEED, InputSpeed);
 
-        target.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * Speed) );
-        
         if (animator.IsInTransition(0)) return;
 
         if(Input.GetKeyDown(KeyCode.Mouse0))

@@ -9,11 +9,16 @@ public class DummyCharacter : MonoBehaviour
 {
     static List<Collider> s_dummyColliders = new List<Collider>();
 
-    public static bool IsDummyCollider(Collider collider)
+    public static bool IsDummyCollider(Collider collider, out DummyCharacter dummy)
     {
+        dummy = null;
         foreach (Collider c in s_dummyColliders)
         {
-            if(c == collider) return true;
+            if (c == collider)
+            {
+                dummy = c.GetComponent<DummyCharacter>();
+                return true;
+            }
         }
         return false;
     }
@@ -42,19 +47,10 @@ public class DummyCharacter : MonoBehaviour
         Destroy(hitEffect);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void SpawnHitEffect(Vector3 position, Quaternion rotation)
     {
-        if(Weapon.IsWeaponCollider(other))
-        {
-            Vector3 hitPosition = other.ClosestPoint(transform.position);
-            hitPosition = dummyCollider.ClosestPoint(other.transform.position);
-            Vector3 hitNormal = (hitPosition - transform.position).normalized;
-
-            GameObject hitEffect = Instantiate(hitEffectPrefab, hitPosition, Quaternion.LookRotation(hitNormal, Vector3.up));
-            StartCoroutine(UpdateHitEffect(hitEffect));
-            
-            //EditorApplication.isPaused = true;
-
-        }
+        GameObject hitEffect = Instantiate(hitEffectPrefab, position, rotation);
+        StartCoroutine(UpdateHitEffect(hitEffect));
     }
+
 }

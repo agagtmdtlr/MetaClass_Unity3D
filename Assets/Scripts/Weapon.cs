@@ -9,6 +9,9 @@ public class Weapon : MonoBehaviour
     private static readonly List<Collider> s_hitColliderListOnScene = new List<Collider>();
     public Transform socketTransform;
     public Collider hitCollider;
+
+    public Vector3 prevPosition;
+    public Vector3 prevDirection;
     
     [System.Serializable]
     public class Skill
@@ -40,6 +43,9 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        prevPosition = socketTransform.position;
+        prevDirection = socketTransform.forward;
+        
         transform.position = socketTransform.position;
         transform.localScale = socketTransform.localScale;
         transform.rotation = socketTransform.rotation;
@@ -50,4 +56,29 @@ public class Weapon : MonoBehaviour
         s_hitColliderListOnScene.Remove(hitCollider);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (DummyCharacter.IsDummyCollider(other, out DummyCharacter dummyCharacter))
+        {
+            var curPosition = socketTransform.position;
+            var curDirection = socketTransform.forward;
+
+            Debug.Log($"{prevPosition} {curPosition}");
+            
+            for (int i = 0; i < 10; i++)
+            {
+                float t = (float)(i) / 10;
+                var checkPosition = Vector3.Lerp(prevPosition, curPosition, t);
+                var checkDirection = Vector3.Lerp(prevDirection, curDirection, t);
+
+                if (Physics.Raycast(checkPosition, checkDirection, out RaycastHit hit, 10))
+                {
+                    dummyCharacter.SpawnHitEffect(hit.point, Quaternion.LookRotation(hit.normal));
+                    break;
+                }
+            }
+            
+        }
+        
+    }
 }

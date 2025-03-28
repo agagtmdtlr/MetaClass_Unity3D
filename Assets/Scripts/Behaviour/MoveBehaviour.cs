@@ -22,25 +22,7 @@ public class MoveBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Vector2 axisInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        
-        float InputSpeed = 1f;
-        Input.GetKey(KeyCode.LeftShift); 
-        if (Input.GetKey(KeyCode.LeftShift))
-            InputSpeed = 2.0f;
-
-        axisInput *= InputSpeed;
-        
-        animator.SetFloat(MOVE_Z, axisInput.y);
-        animator.SetFloat(MOVE_X, axisInput.x);
-        animator.SetFloat(SPEED, InputSpeed);
-
-        if (animator.IsInTransition(0)) return;
-
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            animator.SetTrigger(ATTACK);
-        }
+       
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

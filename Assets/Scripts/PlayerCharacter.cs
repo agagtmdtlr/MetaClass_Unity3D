@@ -31,13 +31,15 @@ public class PlayerCharacter : MonoBehaviour
 
     public void ChangestState(PlayerState.StateName newState)
     {
-        if (currentState != null)
+        if (currentState is not null)
         {
             currentState.gameObject.SetActive(false);
+            currentState.ExitState();
         }
         
         currentState = statesDic[newState];
         currentState.gameObject.SetActive(true);
+        currentState.EnterState();
     }
 
     void Update()
@@ -53,7 +55,7 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
-    private Dictionary<string, AttackBehaviour> attackBehaviours = new Dictionary<string, AttackBehaviour>();
+    private readonly Dictionary<string, AttackBehaviour> attackBehaviours = new Dictionary<string, AttackBehaviour>();
     
     void InitializeAnimator()
     {
@@ -70,8 +72,8 @@ public class PlayerCharacter : MonoBehaviour
         
         InitializeClipObjectReference();
     }
-    
-    public void EquipNextWeapon()
+
+    private void EquipNextWeapon()
     {
         Weapon currentWeapon = weapons[currentWeaponIndex];
         currentWeapon.gameObject.SetActive(false);
@@ -89,7 +91,6 @@ public class PlayerCharacter : MonoBehaviour
         foreach (var skill in currentWeapon.skills)
         {
             currentWeapon.animatorController[skill.type] = skill.clip;
-            attackBehaviours[skill.type].enableHitBoxTime = skill.enableHitBoxTime;
         }
     }
 

@@ -1,48 +1,42 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class AttackState : PlayerState
+public abstract class AttackState : PlayerState
 {
-    private static readonly int ATTACK = Animator.StringToHash("Attack");
+    [Range(0,1)]
+    public float enableHitBoxTime = 0;
+    bool enableHitBox = false;
+    [Range(0,1)]
+    public float disableHitBoxTime = 1f;
+    bool disableHitBox = false;
     
-    public override StateName stateName =>  StateName.Attack;
-
-    public override void Initialize(PlayerCharacter character)
+    protected virtual void Update()
     {
-        base.Initialize(character);
+        var stateInfo = stateAnimator.GetCurrentAnimatorStateInfo(0);
 
-        var attacks = animator.GetBehaviours<AttackBehaviour>();
-        foreach (var attack in attacks)
+        if (!enableHitBox && stateInfo.normalizedTime >= enableHitBoxTime)
         {
-            attack.beginHitEvent += EnableHitbox;
-            attack.endHitEvent += DisableHitbox;
+            stateCharacter.BeginHit();
+            enableHitBox = true;
+        }
+
+        if (!disableHitBox && stateInfo.normalizedTime >= disableHitBoxTime)
+        {
+            stateCharacter.EndHit();
+            disableHitBox = true;
         }
     }
 
-    private void OnEnable()
+    public override void EnterState()
     {
-        animator.SetTrigger(ATTACK);
-    }
-    
-    private void OnDisable()
-    {
+        enableHitBox = false;
+        disableHitBox = false;
     }
 
-    private void EnableHitbox()
+    public override void ExitState()
     {
-        character.CurrentWeapon.hitCollider.enabled = true;
+        stateCharacter.EndHit();
     }
 
-    private void DisableHitbox()
-    {
-        character.CurrentWeapon.hitCollider.enabled = false;
-    }
-
-    private void ComboAttack()
-    {
-        animator.SetTrigger(ATTACK);
-    }
 }

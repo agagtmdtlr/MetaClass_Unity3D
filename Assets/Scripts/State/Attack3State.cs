@@ -12,7 +12,7 @@ public class Attack3State : AttackState
     public override void EnterState()
     {
         base.EnterState();
-        stateAnimator.CrossFade(ATTACK,0.1f);
+        stateAnimator.CrossFade(ATTACK,0.1f, stateLayerIndex);
     }
 
     protected override void Update()
@@ -23,7 +23,7 @@ public class Attack3State : AttackState
         float normalizeTime = stateInfo.normalizedTime;
         if (normalizeTime > 1f)
         {
-            stateCharacter.ChangestState(StateName.Move);
+            stateCharacter.ChangestState(StateName.ReadyAttack, stateLayerIndex);
         }
     }
 

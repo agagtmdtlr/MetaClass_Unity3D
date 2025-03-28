@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class AttackState : PlayerState
 {
+    public override int stateLayerIndex => 1;
+    
     [Range(0,1)]
     public float enableHitBoxTime = 0;
     bool enableHitBox = false;
@@ -32,11 +34,13 @@ public abstract class AttackState : PlayerState
     {
         enableHitBox = false;
         disableHitBox = false;
+        stateAnimator.SetLayerWeight(stateLayerIndex,1f);
     }
 
     public override void ExitState()
     {
         stateCharacter.EndHit();
+        stateAnimator.SetLayerWeight(stateLayerIndex,0f);
     }
 
 }

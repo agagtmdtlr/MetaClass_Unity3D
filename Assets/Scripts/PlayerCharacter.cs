@@ -10,41 +10,54 @@ public class PlayerCharacter : MonoBehaviour
     private int currentWeaponIndex = 0;
     [SerializeField] Weapon[] weapons;
 
-    private readonly Dictionary<PlayerState.StateName, PlayerState> statesDic 
-        = new Dictionary<PlayerState.StateName, PlayerState>();
-
-    PlayerState currentState;
+    // 레이어 별로 state 관리하기
+    private Dictionary<PlayerState.StateName, PlayerState>[] stateLayers =
+        new Dictionary<PlayerState.StateName, PlayerState>[2];
+    
+    PlayerState[] currentStateInLayer = new PlayerState[2];
+    
+    
     public Weapon CurrentWeapon => weapons[currentWeaponIndex];
     
     void Start()
     {
+        for (int i = 0; i < stateLayers.Length; i++)
+        {
+            stateLayers[i] = new Dictionary<PlayerState.StateName, PlayerState>();
+        }
+        
         PlayerState[] states = GetComponentsInChildren<PlayerState>(true);
         foreach (PlayerState state in states)
         {
-            statesDic[state.stateName] = state;
+            stateLayers[state.stateLayerIndex][state.stateName] = state;
             state.Initialize(this);
         }
         
-        ChangestState(PlayerState.StateName.Move);
+        ChangestState(PlayerState.StateName.Move, 0);
+        ChangestState(PlayerState.StateName.ReadyAttack, 1);
+        
         InitializeAnimator();
     }
 
-    public void ChangestState(PlayerState.StateName newState)
+    public void ChangestState(PlayerState.StateName newState, int layerIndex)
     {
-        if (currentState is not null)
+        var beforeState = currentStateInLayer[layerIndex];   
+        if (beforeState is not null)
         {
-            currentState.gameObject.SetActive(false);
-            currentState.ExitState();
+            beforeState.gameObject.SetActive(false);
+            beforeState.ExitState();
         }
         
-        currentState = statesDic[newState];
-        currentState.gameObject.SetActive(true);
-        currentState.EnterState();
+        var nextState = stateLayers[layerIndex][newState];
+        currentStateInLayer[layerIndex] = nextState;
+        nextState.gameObject.SetActive(true);
+        nextState.EnterState();
     }
-
+    
     void Update()
     {
         UpdateEquip();
+        Ray ray = new Ray(transform.position, Vector3.down);
     }
 
     void UpdateEquip()
@@ -54,20 +67,10 @@ public class PlayerCharacter : MonoBehaviour
             EquipNextWeapon();
         }
     }
-
-    private readonly Dictionary<string, AttackBehaviour> attackBehaviours = new Dictionary<string, AttackBehaviour>();
     
     void InitializeAnimator()
     {
         animator = GetComponent<Animator>();
-
-        var attacks = animator.GetBehaviours<AttackBehaviour>();
-        foreach (var attack in attacks)
-        {
-            attack.beginHitEvent += BeginHit;
-            attack.endHitEvent += EndHit;
-            attackBehaviours[attack.Name] = attack;
-        }
         OnChangeEquip();
         
         InitializeClipObjectReference();

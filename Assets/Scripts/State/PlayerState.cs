@@ -5,15 +5,24 @@ using UnityEngine;
 
 public abstract class PlayerState : MonoBehaviour
 {
+    protected AnimatorStateInfo CurrentStateInfo
+    {
+        get { return stateAnimator.GetCurrentAnimatorStateInfo(stateLayerIndex); }
+    } 
+    
     public enum StateName
     {
         Move,
+        ReadyAttack,
         Attack1,
         Attack2,
         Attack3,
     }
     
     public abstract StateName stateName { get; }
+    
+    public abstract int stateLayerIndex { get; }
+
     protected Animator stateAnimator { get; private set; }
     protected PlayerCharacter stateCharacter;
     

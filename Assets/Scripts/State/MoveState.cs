@@ -15,10 +15,11 @@ public class MoveState : PlayerState
 
     private static readonly int SPEED = Animator.StringToHash("Speed");
     public override StateName stateName => StateName.Move;
-    
+    public override int stateLayerIndex => 0;
+
     public override void EnterState()
     {
-        stateAnimator.CrossFade(MOVE,0.1f);
+        stateAnimator.CrossFade(MOVE,0.1f, stateLayerIndex);
     }
 
     public override void ExitState()
@@ -27,14 +28,16 @@ public class MoveState : PlayerState
 
     public float moveSpeed = 5.0f;
 
+    
+    
     void Update()
     {
         UpdateMovement();
         UpdateAnimation();
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            stateCharacter.ChangestState(StateName.Attack1);
-        }
+        
+        
+        
+        
     }
 
     void UpdateMovement()
@@ -46,7 +49,17 @@ public class MoveState : PlayerState
         
         axisInput *= inputSpeed;
         stateCharacter.transform.Translate(new Vector3(axisInput.x, 0, axisInput.y) * (Time.deltaTime * moveSpeed) );
+        
+        Ray ray = new Ray(stateCharacter.transform.position + Vector3.up  * 10f, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            var p = stateCharacter.transform.position;
+            p.y = hit.point.y;
+            stateCharacter.transform.position = p;
+        }
     }
+
+    
 
     void UpdateAnimation()
     {

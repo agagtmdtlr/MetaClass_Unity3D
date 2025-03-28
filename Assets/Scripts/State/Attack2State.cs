@@ -13,7 +13,7 @@ public class Attack2State : AttackState
     public override void EnterState()
     {
         base.EnterState();
-        stateAnimator.CrossFade(ATTACK,0.1f);
+        stateAnimator.CrossFade(ATTACK,0.1f, stateLayerIndex);
         nextAttack = false;
     }
 
@@ -21,7 +21,7 @@ public class Attack2State : AttackState
     {
         base.Update();
         
-        var stateInfo = stateAnimator.GetCurrentAnimatorStateInfo(0);
+        var stateInfo = stateAnimator.GetCurrentAnimatorStateInfo(stateLayerIndex);
         float normalizeTime = stateInfo.normalizedTime;
         if (Input.GetMouseButtonDown(0) && 0.4f < normalizeTime && normalizeTime < 0.85f)
         {
@@ -32,11 +32,11 @@ public class Attack2State : AttackState
         {
             if (nextAttack)
             {
-                stateCharacter.ChangestState(StateName.Attack2);
+                stateCharacter.ChangestState(StateName.Attack2, stateLayerIndex);
             }
             else
             {
-                stateCharacter.ChangestState(StateName.Move);
+                stateCharacter.ChangestState(StateName.ReadyAttack, stateLayerIndex);
             }
         }
     }

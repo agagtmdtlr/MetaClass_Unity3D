@@ -1,18 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocalPlayer : MonoBehaviour
+public class LocalPlayer : Player, IDamagable
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        Player.localPlayer = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public Collider MainCollider { get; }
+    public GameObject GameObject { get; }
+    public void TakeDamage(CombatEvent combatEvent)
     {
-        
     }
 }

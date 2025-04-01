@@ -16,7 +16,7 @@ public class BossMonster : MonoBehaviour , IDamagable
         CombatSystem.Instance.RegisterMonster(this);
     }
 
-    public void TakeDamage(CombatSystem combatEvent)
+    public void TakeDamage(CombatEvent combatEvent)
     {
     }
 

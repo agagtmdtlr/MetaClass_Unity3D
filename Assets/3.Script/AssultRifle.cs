@@ -15,11 +15,13 @@ public class AssultRifle : MonoBehaviour
     public float CurrentFireRate { get; private set; }
     private float CurrentMuzzleFlashDuration { get; set; }
     
+    private Camera mainCam;
+
     // Start is called before the first frame update
     void Start()
     {
+        mainCam = Camera.main;
         muzzleFlash.SetActive(true);
-        
     }
 
     // Update is called once per frame
@@ -33,6 +35,7 @@ public class AssultRifle : MonoBehaviour
             muzzleFlash.SetActive(false);
         }
     }
+
 
     public bool Fire()
     {
@@ -51,7 +54,24 @@ public class AssultRifle : MonoBehaviour
         
         muzzleFlash.SetActive(true);
         CurrentMuzzleFlashDuration = 0f;
+        
+        Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
+        if (Physics.Raycast(ray, out RaycastHit hit, data.range, LayerMask.GetMask("Enemy")))
+        {
+            IDamagable enemy = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
+            if (enemy != null)
+            {
+                CombatEvent combatEvent = new CombatEvent
+                {
+                    Sender = Player.localPlayer,
+                    Receiver = enemy,
+                    Damage = data.damage,
+                    HitPosition = hit.point
+                };
+                CombatSystem.Instance.AddCombatEvent(combatEvent);
+            }
+        }
         return true;
     }
     

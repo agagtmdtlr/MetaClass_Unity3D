@@ -14,11 +14,11 @@ public class DamageTextEffect : Poolable
     private TMP_Text damageText;
     
     private float showTime = 0f;
-    private Camera camera1;
+    private Camera mainCamera;
 
     private void Start()
     {
-        camera1 = Camera.main;
+        mainCamera = Camera.main;
     }
 
     private void OnEnable()
@@ -33,22 +33,32 @@ public class DamageTextEffect : Poolable
     
     private void Update()
     {
-        damageText.text = damage.ToString();
-        var screenPoint= camera1.WorldToScreenPoint(effectPosition);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            transform.parent as RectTransform, 
-            screenPoint, 
-            camera1, 
-            out Vector2 localPoint
-        );
-        
-        // 로컬 좌표를 RectTransform 위치로 설정
-        rectTransform.localPosition = localPoint;
+        UpdateDamageText();
+        UpdatePosition();
+
         showTime += Time.deltaTime;
         if (showTime > 2f)
         {
             Release();
         }
+    }
+
+    private void UpdateDamageText()
+    {
+        damageText.text = damage.ToString();
+    }
+
+    private void UpdatePosition()
+    {
+        var screenPoint = mainCamera.WorldToScreenPoint(effectPosition);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            transform.parent as RectTransform,
+            screenPoint,
+            mainCamera,
+            out Vector2 localPoint
+        );
+
+        rectTransform.localPosition = localPoint;
     }
     
 }

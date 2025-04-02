@@ -67,7 +67,8 @@ public class AssultRifle : MonoBehaviour
                     Sender = Player.localPlayer,
                     Receiver = enemy,
                     Damage = data.damage,
-                    HitPosition = hit.point
+                    HitPosition = hit.point,
+                    Collider = hit.collider
                 };
                 CombatSystem.Instance.AddCombatEvent(combatEvent);
             }

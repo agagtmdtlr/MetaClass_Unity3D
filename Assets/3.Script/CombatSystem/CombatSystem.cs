@@ -11,6 +11,8 @@ public class CombatSystem : MonoBehaviour
     {
         // CombatEvent가 발생하면의 의미로 씀
         public Action<CombatEvent> OnCombatEvent;
+        
+        //public Action<CombatEvent> OnTakeDamage;
     }
     
     public static CombatSystem Instance { get; private set; }
@@ -54,6 +56,23 @@ public class CombatSystem : MonoBehaviour
                 + $"{monsterDic[monster.MainCollider].GameObject.name}를 대체합니다.");
             
             monsterDic[monster.MainCollider] = monster;
+        }
+    }
+    
+    public void RegisterMonster(Collider collider, IDamagable monster)
+    {
+        if (monster.MainCollider == null)
+        {
+            Debug.LogWarning($"{monster.GameObject.name}의 MainCollider가 null입니다.");
+        }
+        
+        if (monsterDic.TryAdd(collider, monster) == false)
+        {
+            Debug.LogWarning(
+                $"{monster.GameObject.name}가 등록 되어 있습니다."
+                + $"{monsterDic[collider].GameObject.name}를 대체합니다.");
+            
+            monsterDic[collider] = monster;
         }
     }
 

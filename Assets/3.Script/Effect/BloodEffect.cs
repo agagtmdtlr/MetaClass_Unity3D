@@ -6,15 +6,15 @@ using UnityEngine.Pool;
 
 public class BloodEffect : Poolable
 {
-    ParticleSystem particleSystem;
+    ParticleSystem bloodParticle;
     void OnEnable()
     {
-        particleSystem = GetComponentInChildren<ParticleSystem>(true);
+        bloodParticle = GetComponentInChildren<ParticleSystem>(true);
     }
 
     private void Update()
     {
-        if (!particleSystem.isPlaying)
+        if (!bloodParticle.isPlaying)
         {
             Release();
         }

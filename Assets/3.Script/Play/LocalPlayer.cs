@@ -15,4 +15,9 @@ public class LocalPlayer : Player, IDamagable
     public void TakeDamage(CombatEvent combatEvent)
     {
     }
+
+    public DamageArea GetDamageArea(Collider collider)
+    {
+        return DamageArea.None;
+    }
 }

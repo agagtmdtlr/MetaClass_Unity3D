@@ -7,9 +7,10 @@ public interface IObjectPoolItem
     string Key { get; set; }
     GameObject GameObject { get; }
     
-    
-    void ReturenToPool();
+    void ReturnToPool();
 }
+
+
 
 public class ObjectPool
 {
@@ -28,6 +29,7 @@ public class ObjectPool
     /// <param name="key">풀 아이템 참조 키</param>
     public void Initialize(Transform parent, IObjectPoolItem sample, string key, byte expandSize)
     {
+        Parent = parent;
         Pool = new Stack<IObjectPoolItem>();
         Sample = sample;
         Sample.GameObject.SetActive(false);
@@ -51,6 +53,7 @@ public class ObjectPool
         {
             Expand();
         }
+        
         return Pool.Pop();
     }
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
@@ -9,6 +11,7 @@ public class ObjectPoolManager : MonoBehaviour
     public class ObjectPoolData
     {
         public string Key;
+        public Transform Parent;
         public GameObject Prefab;
         public byte ExpandSize;
     }
@@ -48,15 +51,18 @@ public class ObjectPoolManager : MonoBehaviour
         }
         
         var pool = new ObjectPool();
-        pool.Initialize(data.Prefab.transform, poolItem,  data.Key, data.ExpandSize);   
+        pool.Initialize(data.Parent, poolItem,  data.Key, data.ExpandSize);   
         poolDict.Add(data.Key, pool);
     }
+
 
     public IObjectPoolItem GetObjectOrNull(string key)
     {
         if (poolDict.TryGetValue(key, out var pool))
         {
-            return pool.Get();
+            var obj = pool.Get();
+            obj.GameObject.SetActive(true);
+            return obj;
         }
         else
         {

@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ParticleEffect : MonoBehaviour, IObjectPoolItem
 {
     void Update()
     {
-        if (particleSystem.isPlaying == false)
+        if (particle.isPlaying == false)
         {
-            ReturenToPool();
+            ReturnToPool();
         }   
     }
 
     public string Key { get; set; }
     public GameObject GameObject => gameObject;
     
-    public ParticleSystem particleSystem;
+    public ParticleSystem particle;
     
-    public void ReturenToPool()
+    public void ReturnToPool()
     {
         ObjectPoolManager.Instance.ReturnToPool(this);
     }

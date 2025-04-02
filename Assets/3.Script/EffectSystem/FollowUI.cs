@@ -10,8 +10,8 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
     
     public GameObject GameObject => gameObject;
 
-    private Camera camera;
-    private Canvas canvas;
+    private Camera uiCamera;
+    private Canvas uiCanvas;
     
     private EffectTarget target;
     private TMP_Text text;
@@ -27,15 +27,15 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
         isInitialize = true;
         
         text = GetComponent<TMP_Text>();
-        if(text == null)
+        if(text is null)
             Debug.LogWarning("FollowUI : TMP_Text 컴포넌트가 없습니다.");
         
         rectTransform = GetComponent<RectTransform>();
-        if(rectTransform == null)
+        if(rectTransform is null)
             Debug.LogWarning("FollowUI : RectTransform 컴포넌트가 없습니다.");
         
-        this.camera = camera;
-        this.canvas = canvas;
+        this.uiCamera = camera;
+        this.uiCanvas = canvas;
     }
     
     private void Update()
@@ -51,11 +51,11 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
         duration -= Time.deltaTime;
 
         // 3d -> screen 2d
-        Vector3 screenPos = camera.WorldToScreenPoint(target.transform.position);
+        Vector3 screenPos = uiCamera.WorldToScreenPoint(target.transform.position);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform, 
+            uiCanvas.transform as RectTransform, 
             screenPos, 
-            camera, 
+            uiCamera, 
             out Vector2 localPoint
             );
         

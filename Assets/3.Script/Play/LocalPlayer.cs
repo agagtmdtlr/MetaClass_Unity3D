@@ -20,4 +20,9 @@ public class LocalPlayer : Player, IDamagable
     {
         return DamageArea.None;
     }
+
+    public DamageSurface GetDamageSurface(Collider collider)
+    {
+        return DamageSurface.Orginic;
+    }
 }

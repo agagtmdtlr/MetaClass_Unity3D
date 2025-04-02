@@ -34,9 +34,6 @@ public class BossMonster : MonoBehaviour , IDamagable
     {
         var hitCollider = combatEvent.Collider;
         var monster = CombatSystem.Instance.GetMonsterOrNull(hitCollider);
-        if (monster == this)
-        {
-        }
     }
 
     public DamageArea GetDamageArea(Collider collider)
@@ -60,5 +57,10 @@ public class BossMonster : MonoBehaviour , IDamagable
         }
 
         return DamageArea.None;
+    }
+
+    public DamageSurface GetDamageSurface(Collider collider)
+    {
+        return DamageSurface.Orginic;
     }
 }

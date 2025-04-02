@@ -9,5 +9,6 @@ public class CombatEvent
     
     public int Damage { get; set; }
     public Vector3 HitPosition { get; set; }
+    public Vector3 HitNormal { get; set; }
     public Collider Collider { get; set; }
 }

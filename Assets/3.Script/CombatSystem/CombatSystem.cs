@@ -11,8 +11,6 @@ public class CombatSystem : MonoBehaviour
     {
         // CombatEvent가 발생하면의 의미로 씀
         public Action<CombatEvent> OnCombatEvent;
-        
-        //public Action<CombatEvent> OnTakeDamage;
     }
     
     public static CombatSystem Instance { get; private set; }

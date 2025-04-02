@@ -12,6 +12,13 @@ public enum DamageArea
     RightArm,
 }
 
+public enum DamageSurface
+{
+    Wood,
+    Metal,
+    Orginic
+}
+
 public interface IDamagable
 {
     public Collider MainCollider { get; }
@@ -20,4 +27,6 @@ public interface IDamagable
     public void TakeDamage(CombatEvent combatEvent);
     
     public DamageArea GetDamageArea(Collider collider);
+
+    public DamageSurface GetDamageSurface(Collider collider);
 }

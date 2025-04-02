@@ -41,6 +41,8 @@ public class DamageTextEffectPool : MonoBehaviour
         DamageTextEffect txtEffect = obj as DamageTextEffect;
         if (txtEffect is not null)
         {
+            Debug.Log("show damage text effect");
+            
             txtEffect.transform.SetParent(effectCanvas.transform);
 
             txtEffect.transform.localRotation = Quaternion.identity;

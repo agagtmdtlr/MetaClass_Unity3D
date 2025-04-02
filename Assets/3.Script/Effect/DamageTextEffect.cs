@@ -18,19 +18,17 @@ public class DamageTextEffect : Poolable
 
     private void Start()
     {
+        rectTransform = gameObject.GetComponent<RectTransform>();
+        damageText = gameObject.GetComponentInChildren<TMP_Text>();
+        
         mainCamera = Camera.main;
     }
 
     private void OnEnable()
     {
-        rectTransform = gameObject.GetComponent<RectTransform>();
-        damageText = gameObject.GetComponentInChildren<TMP_Text>();
-        damageText.text = damage.ToString();
-        
         showTime = 0f;
     }
 
-    
     private void Update()
     {
         UpdateDamageText();

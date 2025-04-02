@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class TestEffect : MonoBehaviour
 {
-    [SerializeField] private GameObject prefab;
-    
     void Start()
     {
         CombatSystem.Instance.Events.OnCombatEvent += PlayBlood;
@@ -17,9 +15,10 @@ public class TestEffect : MonoBehaviour
         CombatSystem.Instance.Events.OnCombatEvent -= PlayBlood;
     }
 
-
     private void PlayBlood(CombatEvent combatEvent)
     {
-        Instantiate(prefab, combatEvent.HitPosition, Quaternion.identity);
+        var blood = ObjectPoolManager.Instance.GetObjectOrNull("Blood");
+        blood.GameObject.transform.position = combatEvent.HitPosition;
+        blood.GameObject.SetActive(true);
     }
 }

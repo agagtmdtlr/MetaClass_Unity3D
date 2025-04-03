@@ -6,7 +6,6 @@ public class GrenadeLauncher : Weapon
 {
     [Header("Grenade Launcher")]
     public Transform grenadeEjectTransform;
-    public  Grenade grenadePrefab;
     
     [Header("Visual")]
     public GameObject muzzleFlash;
@@ -16,7 +15,7 @@ public class GrenadeLauncher : Weapon
     
     void Start()
     {
-        muzzleFlash.SetActive(true);
+        muzzleFlash.SetActive(false);
     }
     
     void Update()
@@ -47,8 +46,10 @@ public class GrenadeLauncher : Weapon
         
         muzzleFlash.SetActive(true);
         CurrentMuzzleFlashDuration = 0f;
-        
-        var grenade = Instantiate(grenadePrefab, grenadeEjectTransform.position, grenadeEjectTransform.rotation);
+
+        var grenade = ObjectPoolManager.Instance.GetObjectOrNull("Grenade") as Grenade;
+        grenade.GameObject.transform.position = grenadeEjectTransform.position;
+        grenade.GameObject.transform.rotation = grenadeEjectTransform.rotation;
         grenade.Damage = data.damage;
         grenade.Launch(20f);
         

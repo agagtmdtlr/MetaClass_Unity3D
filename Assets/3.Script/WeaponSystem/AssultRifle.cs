@@ -19,7 +19,7 @@ public class AssultRifle : Weapon
     void Start()
     {
         mainCam = Camera.main;
-        muzzleFlash.SetActive(true);
+        muzzleFlash.SetActive(false);
     }
 
     // Update is called once per frame

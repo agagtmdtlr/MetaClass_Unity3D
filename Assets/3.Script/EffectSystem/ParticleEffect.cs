@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(ParticleSystem))]
 public class ParticleEffect : MonoBehaviour, IObjectPoolItem
 {
-    void Update()
+    protected virtual void Update()
     {
         if (particle.isPlaying == false)
         {

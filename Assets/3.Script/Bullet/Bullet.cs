@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
+public abstract class Bullet : MonoBehaviour , IObjectPoolItem
 {
-    // Start is called before the first frame update
-    void Start()
+    public Weapon weapon;
+    
+    public int Damage { get; set; }
+    [SerializeField] protected Rigidbody bulletRigidbody;
+    [SerializeField] protected Collider  bulletCollider;
+    public string Key { get; set; }
+    public GameObject GameObject => gameObject;
+    public void ReturnToPool()
     {
-        
+        weapon.ReturnToWeapon(this);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+    public abstract void Launch(float force);
 }

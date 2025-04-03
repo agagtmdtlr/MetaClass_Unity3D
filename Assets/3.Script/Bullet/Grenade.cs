@@ -4,27 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class Grenade : MonoBehaviour
+public class Grenade : Bullet
 {
-    [SerializeField] private ParticleSystem explosionEffect;
-    public int Damage { get; set; }
-    
-    [SerializeField] private Rigidbody bulletRigidbody;
-    [SerializeField] private Collider  bulletCollider;
     private void Awake()
     {
         bulletCollider.isTrigger = true;
     }
 
-    void Update()
-    {
-        if (explosionEffect.gameObject.activeInHierarchy && explosionEffect.isPlaying is false)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void Launch(float force)
+    public override void Launch(float force)
     {
         bulletRigidbody.AddForce(-transform.up * force, ForceMode.Impulse);
     }
@@ -48,9 +35,11 @@ public class Grenade : MonoBehaviour
                 HitNormal = hitNormal
             };
             CombatSystem.Instance.AddCombatEvent(combatEvent);
-            explosionEffect.gameObject.SetActive(true);
             
-        }
+            var explosion = ObjectPoolManager.Instance.GetObjectOrNull("Explosion") as ParticleEffect;
+            explosion.transform.position = transform.position;
+            ReturnToPool();
+        } 
         
     }
 }

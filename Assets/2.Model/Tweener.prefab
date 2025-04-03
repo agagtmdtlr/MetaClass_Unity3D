@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 292416958023344182}
   - component: {fileID: -8248892410049883539}
   m_Layer: 0
-  m_Name: TargetTransform
+  m_Name: Tweener
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

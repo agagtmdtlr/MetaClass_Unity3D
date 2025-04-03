@@ -17,11 +17,11 @@ public class LocalPlayer : Player, IDamagable
 
     public DamageArea GetDamageArea(Collider collider)
     {
-        return DamageArea.None;
+        return DamageArea.Unknown;
     }
 
     public DamageSurface GetDamageSurface(Collider collider)
     {
-        return DamageSurface.Orginic;
+        return DamageSurface.Skin;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum DamageArea
 {
-    None,
+    Unknown,
     Head,
     Body,
     LeftArm,
@@ -16,7 +16,7 @@ public enum DamageSurface
 {
     Wood,
     Metal,
-    Orginic
+    Skin
 }
 
 public interface IDamagable
@@ -24,8 +24,5 @@ public interface IDamagable
     public GameObject GameObject { get; }
     
     public void TakeDamage(CombatEvent combatEvent);
-    
-    public DamageArea GetDamageArea(Collider collider);
-
-    public DamageSurface GetDamageSurface(Collider collider);
+   
 }

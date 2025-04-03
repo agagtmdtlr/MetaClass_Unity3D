@@ -5,17 +5,16 @@ using UnityEngine.Serialization;
 
 public class Obstacle : MonoBehaviour, IDamagable
 {
-    Collider obstacleCollider;
+    HitBox hitBox;
     public DamageSurface surfaceType;
     
     // Start is called before the first frame update
     void Start()
     {
-        obstacleCollider = GetComponent<Collider>();
-        CombatSystem.Instance.RegisterMonster(obstacleCollider, this);
+        hitBox = GetComponent<HitBox>();
+        CombatSystem.Instance.RegisterMonster(hitBox, this);
     }
 
-    public Collider MainCollider => obstacleCollider;
     public GameObject GameObject => gameObject;
     public void TakeDamage(CombatEvent combatEvent)
     {
@@ -23,7 +22,7 @@ public class Obstacle : MonoBehaviour, IDamagable
 
     public DamageArea GetDamageArea(Collider collider)
     {
-        return DamageArea.None;
+        return DamageArea.Unknown;
     }
 
     public DamageSurface GetDamageSurface(Collider collider)

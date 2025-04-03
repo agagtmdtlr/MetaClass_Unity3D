@@ -10,7 +10,10 @@ public class AssultRifle : MonoBehaviour
     [Header("Visual")]
     public GameObject muzzleFlash;
     public float muzzleFlashDuration = 0.1f;
-
+    
+    [Header("Bullet Shell")]
+    public Transform shellEjectTransform;
+    
     public int CurrentAmmo { get; private set; }
     public float CurrentFireRate { get; private set; }
     private float CurrentMuzzleFlashDuration { get; set; }
@@ -55,11 +58,22 @@ public class AssultRifle : MonoBehaviour
         muzzleFlash.SetActive(true);
         CurrentMuzzleFlashDuration = 0f;
         
+        // shell eject
+        var shell= ObjectPoolManager.Instance.GetObjectOrNull("Shell");
+        shell.GameObject.transform.position = shellEjectTransform.position;
+        shell.GameObject.transform.forward = shellEjectTransform.forward;
+        
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, data.range, LayerMask.GetMask("Enemy")))
         {
-            IDamagable enemy = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
+            HitBox hitBox = hit.collider.GetComponent<HitBox>();
+            if (hitBox is null)
+            {
+                return false;
+            }
+            
+            IDamagable enemy = CombatSystem.Instance.GetMonsterOrNull(hitBox);
             if (enemy != null)
             {
                 CombatEvent combatEvent = new CombatEvent
@@ -69,11 +83,13 @@ public class AssultRifle : MonoBehaviour
                     Damage = data.damage,
                     HitPosition = hit.point,
                     HitNormal = hit.normal,
-                    Collider = hit.collider
+                    HitBox = hitBox
                 };
                 CombatSystem.Instance.AddCombatEvent(combatEvent);
             }
         }
+        
+        
         return true;
     }
     

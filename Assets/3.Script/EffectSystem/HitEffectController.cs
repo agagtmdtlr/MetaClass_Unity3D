@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class TestEffect : MonoBehaviour
+public class HitEffectController : MonoBehaviour
 {
     void Start()
     {
@@ -18,7 +20,7 @@ public class TestEffect : MonoBehaviour
 
     private void PlayHitEffect(CombatEvent combatEvent)
     {
-        var surface = combatEvent.Receiver.GetDamageSurface(combatEvent.Collider);
+        var surface = combatEvent.HitBox.DamageSurface;
 
         string key;
         switch (surface)
@@ -29,7 +31,7 @@ public class TestEffect : MonoBehaviour
             case DamageSurface.Metal:
                 key = "Spark";
                 break;
-            case DamageSurface.Orginic:
+            case DamageSurface.Skin:
                 key = "Blood";
                 break;
             default:

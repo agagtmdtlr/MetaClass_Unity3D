@@ -13,7 +13,7 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
     private Camera uiCamera;
     private Canvas uiCanvas;
     
-    private EffectTarget target;
+    private Transform target;
     private TMP_Text text;
     private float duration;
     
@@ -70,7 +70,7 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
     // 2차원 자표계 (Canvas, Camera)로 위치 좌표를 변환하는 기능
 
 
-    public void Set(EffectTarget target, string content, float duration, Color color)
+    public void Set(Transform target, string content, float duration, Color color)
     {
         this.target = target;
         
@@ -83,8 +83,6 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
     
     public void ReturnToPool()
     {
-
-        target.ReturnToPool();
         ObjectPoolManager.Instance.ReturnToPool(this);
     }
 }

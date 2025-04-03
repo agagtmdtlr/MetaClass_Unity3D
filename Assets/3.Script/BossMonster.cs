@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Build.Content;
 using UnityEngine;
 
@@ -8,33 +9,31 @@ public class BossMonster : MonoBehaviour , IDamagable
 {
     public GameObject GameObject => gameObject;
     
-    private readonly Dictionary<Collider,DamageArea> damageAreas = new Dictionary<Collider, DamageArea>();
+    private List<HitBox> hitBoxes;
     
     private void Start()
     {
-        var hitBoxs = GetComponentsInChildren<HitBox>(true);
-        foreach (var hitbox in hitBoxs)
+        var hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
+        foreach (var hitbox in hitBoxes)
         {
-            damageAreas[hitbox.hitCollider] = hitbox.damageArea;
-            CombatSystem.Instance.RegisterMonster(hitbox.hitCollider, this);
+            CombatSystem.Instance.RegisterMonster(hitbox, this);
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        foreach (var hitbox in hitBoxes)
+        {
+            CombatSystem.Instance.UnregisterMonster(hitbox);
         }
     }
 
     public void TakeDamage(CombatEvent combatEvent)
     {
-        var hitCollider = combatEvent.Collider;
-        var monster = CombatSystem.Instance.GetMonsterOrNull(hitCollider);
+        var monster = CombatSystem.Instance.GetMonsterOrNull(combatEvent.HitBox);
     }
 
-    public DamageArea GetDamageArea(Collider collider)
-    {
-        return damageAreas[collider];
-    }
-
-    public DamageSurface GetDamageSurface(Collider collider)
-    {
-        return DamageSurface.Orginic;
-    }
+    
     
     
     

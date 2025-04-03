@@ -15,7 +15,7 @@ public class CombatSystem : MonoBehaviour
     
     public static CombatSystem Instance { get; private set; }
 
-    private readonly Dictionary<Collider, IDamagable> monsterDic = new Dictionary<Collider, IDamagable>();
+    private readonly Dictionary<HitBox, IDamagable> monsterDic = new Dictionary<HitBox, IDamagable>();
 
     private readonly Queue<CombatEvent> eventQueue = new Queue<CombatEvent>();
     
@@ -28,7 +28,6 @@ public class CombatSystem : MonoBehaviour
     
     private void Update()
     {
-        
         int processCount = 0;
         while (eventQueue.Count > 0 && processCount < MAX_EVENT_PROCESS_COUNT)
         {
@@ -37,31 +36,44 @@ public class CombatSystem : MonoBehaviour
             Events.OnCombatEvent?.Invoke(combatEvent);
             processCount++;
         }
+    }
+    
+    public void UnregisterMonster(HitBox hitBox)
+    {
+        if (hitBox == null)
+        {
+            Debug.LogWarning("HitBox가 null입니다.");
+            return;
+        }
         
+        if (monsterDic.Remove(hitBox) == false)
+        {
+            Debug.LogWarning($"{hitBox.name}가 등록 되어 있지 않습니다.");
+        }
     }
 
-    public void RegisterMonster(Collider collider, IDamagable monster)
+    public void RegisterMonster(HitBox hitBox, IDamagable monster)
     {
-        if (collider == null)
+        if (hitBox == null)
         {
             Debug.LogWarning($"{monster.GameObject.name}의 Collider가 null입니다.");
         }
         
-        if (monsterDic.TryAdd(collider, monster) == false)
+        if (monsterDic.TryAdd(hitBox, monster) == false)
         {
             Debug.LogWarning(
                 $"{monster.GameObject.name}가 등록 되어 있습니다."
-                + $"{monsterDic[collider].GameObject.name}를 대체합니다.");
+                + $"{monsterDic[hitBox].GameObject.name}를 대체합니다.");
             
-            monsterDic[collider] = monster;
+            monsterDic[hitBox] = monster;
         }
     }
 
-    public IDamagable GetMonsterOrNull(Collider monsterCollider)
+    public IDamagable GetMonsterOrNull(HitBox monsterCollider)
     {
         return monsterDic.GetValueOrDefault(monsterCollider,null);
     }
-
+    
     public void AddCombatEvent(CombatEvent combatEvent)
     {
         

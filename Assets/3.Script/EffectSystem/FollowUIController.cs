@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class TestUIEffect : MonoBehaviour
+public class FollowUIController : MonoBehaviour
 {
     public Canvas canvas;
     public Camera uiCamera;
@@ -26,34 +26,30 @@ public class TestUIEffect : MonoBehaviour
         if(text.isInitialize == false)
             text.Initialize( uiCamera,canvas);
         
-        var target = GetTarget(combatEvent);
-        Color color = GetDamageAreaColor(combatEvent.Receiver.GetDamageArea(combatEvent.Collider));
         float duration = 2f;
         
-        text.Set(target, combatEvent.Damage.ToString(), duration,color );
-    }
-
-    EffectTarget GetTarget(CombatEvent combatEvent)
-    {
-        var target = ObjectPoolManager.Instance.GetObjectOrNull("Target") as EffectTarget;
+        var target = ObjectPoolManager.Instance.GetObjectOrNull("Tweener") as Tweener;
         if(target == null)
         {
             Debug.LogError("Target is null");
-            return null;
         }
         target.transform.position = combatEvent.HitPosition;
-        target.Set(Vector3.up, Random.Range(5f,10f));
-
-        return target;
+        target.Set(Vector3.up, Random.Range(5f,10f),duration);
+        
+        
+        Transform targetTransform = target.transform;
+        Color color = GetDamageAreaColor(combatEvent.HitBox.DamageArea);
+        
+        text.Set(targetTransform, combatEvent.Damage.ToString(), duration,color );
     }
-    
+
     
     
     Color GetDamageAreaColor(DamageArea area)
     {
         switch (area)
         {
-            case DamageArea.None:
+            case DamageArea.Unknown:
                 return Color.white;
             case DamageArea.Head:
                 return Color.red;

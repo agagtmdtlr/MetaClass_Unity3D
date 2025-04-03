@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3051554751927068010
 Transform:
   m_ObjectHideFlags: 0
@@ -4734,4 +4734,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a606c1abdd5da949bbe8ac44357eefc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 7175999589990560057}
+  particle: {fileID: 7175999589990560057}

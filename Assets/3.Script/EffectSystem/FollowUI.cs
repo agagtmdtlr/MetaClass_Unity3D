@@ -19,13 +19,8 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
     
     private RectTransform rectTransform;
 
-    public bool isInitialize = false;
-    
-    public void Initialize(Camera camera, Canvas canvas)
+    private void Awake()
     {
-        if (isInitialize) return;
-        isInitialize = true;
-        
         text = GetComponent<TMP_Text>();
         if(text is null)
             Debug.LogWarning("FollowUI : TMP_Text 컴포넌트가 없습니다.");
@@ -34,14 +29,15 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
         if(rectTransform is null)
             Debug.LogWarning("FollowUI : RectTransform 컴포넌트가 없습니다.");
         
-        this.uiCamera = camera;
-        this.uiCanvas = canvas;
+        uiCamera = Camera.main;
+        uiCanvas = GetComponentInParent<Canvas>(true);
+        
+        if(uiCanvas is null)
+            Debug.LogWarning("FollowUI : Canvas 컴포넌트가 없습니다.");
     }
     
     private void Update()
     {
-       
-        // 사용 종료
         if (duration < 0)
         {
             ReturnToPool();
@@ -50,7 +46,6 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
         
         duration -= Time.deltaTime;
 
-        // 3d -> screen 2d
         Vector3 screenPos = uiCamera.WorldToScreenPoint(target.transform.position);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             uiCanvas.transform as RectTransform, 
@@ -62,14 +57,6 @@ public class FollowUI : MonoBehaviour , IObjectPoolItem
         rectTransform.anchoredPosition = localPoint;
     }
     
-
-    // 텍스트 출력
-    // 스스로 사용종료 처리를 하는 것
-    // 풀로 되돌아 가는것
-    // 3차원 좌표계의 오브젝트(Transform)을 참조해서 실시ㅏ능로
-    // 2차원 자표계 (Canvas, Camera)로 위치 좌표를 변환하는 기능
-
-
     public void Set(Transform target, string content, float duration, Color color)
     {
         this.target = target;

@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssultRifle : MonoBehaviour
+public class AssultRifle : Weapon
 {
-    [Header("Gun Data")]
-    public GunData data;
-
     [Header("Visual")]
     public GameObject muzzleFlash;
     public float muzzleFlashDuration = 0.1f;
@@ -14,8 +11,6 @@ public class AssultRifle : MonoBehaviour
     [Header("Bullet Shell")]
     public Transform shellEjectTransform;
     
-    public int CurrentAmmo { get; private set; }
-    public float CurrentFireRate { get; private set; }
     private float CurrentMuzzleFlashDuration { get; set; }
     
     private Camera mainCam;
@@ -40,7 +35,7 @@ public class AssultRifle : MonoBehaviour
     }
 
 
-    public bool Fire()
+    public override bool Fire()
     {
         if(CurrentFireRate < data.fireRate)
             return false;

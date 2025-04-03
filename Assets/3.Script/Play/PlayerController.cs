@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [Header("Animator")]
     public Animator animator;
     
-    public AssultRifle currentWeapon;
+    public Weapon currentWeapon;
     
     private CharacterController controller;
     private Vector3 velocity;

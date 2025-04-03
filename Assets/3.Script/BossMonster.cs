@@ -13,7 +13,7 @@ public class BossMonster : MonoBehaviour , IDamagable
     
     private void Start()
     {
-        var hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
+        hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
         foreach (var hitbox in hitBoxes)
         {
             CombatSystem.Instance.RegisterMonster(hitbox, this);

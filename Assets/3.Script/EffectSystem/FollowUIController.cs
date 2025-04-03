@@ -22,29 +22,26 @@ public class FollowUIController : MonoBehaviour
             Debug.LogError("FollowUI is null");
         }
         
-        var text = item as FollowUI;
-        if(text.isInitialize == false)
-            text.Initialize( uiCamera,canvas);
-        
         float duration = 2f;
         
-        var target = ObjectPoolManager.Instance.GetObjectOrNull("Tweener") as Tweener;
-        if(target == null)
+        var tweener = ObjectPoolManager.Instance.GetObjectOrNull("Tweener") as Tweener;
+        if(tweener == null)
         {
             Debug.LogError("Target is null");
         }
-        target.transform.position = combatEvent.HitPosition;
-        target.Set(Vector3.up, Random.Range(5f,10f),duration);
+        tweener.transform.position = combatEvent.HitPosition;
+        tweener.Set(Vector3.up, Random.Range(5f,10f),duration);
         
         
-        Transform targetTransform = target.transform;
+        Transform targetTransform = tweener.transform;
         Color color = GetDamageAreaColor(combatEvent.HitBox.DamageArea);
-        
-        text.Set(targetTransform, combatEvent.Damage.ToString(), duration,color );
+
+        var followUI = item as FollowUI;
+        if( followUI is null)
+            Debug.LogWarning("followUI is null");
+        followUI.Set(targetTransform, combatEvent.Damage.ToString(), duration,color );
     }
 
-    
-    
     Color GetDamageAreaColor(DamageArea area)
     {
         switch (area)

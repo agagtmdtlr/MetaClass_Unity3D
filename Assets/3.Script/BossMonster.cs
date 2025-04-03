@@ -6,27 +6,17 @@ using UnityEngine;
 
 public class BossMonster : MonoBehaviour , IDamagable
 {
-    public Collider MainCollider => spineCollider;
     public GameObject GameObject => gameObject;
     
-    public Collider spineCollider;
-
-    public Collider headCollider;
-    public Collider[] leftArmColliders; 
-    public Collider[] rightArmColliders; 
+    private readonly Dictionary<Collider,DamageArea> damageAreas = new Dictionary<Collider, DamageArea>();
     
     private void Start()
     {
-        CombatSystem.Instance.RegisterMonster(spineCollider, this);
-        CombatSystem.Instance.RegisterMonster(headCollider, this);
-        foreach (Collider collider in leftArmColliders)
+        var hitBoxs = GetComponentsInChildren<HitBox>(true);
+        foreach (var hitbox in hitBoxs)
         {
-            CombatSystem.Instance.RegisterMonster(collider, this);
-        }
-
-        foreach (Collider collider in rightArmColliders)
-        {
-            CombatSystem.Instance.RegisterMonster(collider, this);
+            damageAreas[hitbox.hitCollider] = hitbox.damageArea;
+            CombatSystem.Instance.RegisterMonster(hitbox.hitCollider, this);
         }
     }
 
@@ -38,29 +28,14 @@ public class BossMonster : MonoBehaviour , IDamagable
 
     public DamageArea GetDamageArea(Collider collider)
     {
-        if (headCollider == collider)
-            return DamageArea.Head;
-
-        if (spineCollider == collider)
-            return DamageArea.Body;
-
-        foreach (var armCollider in leftArmColliders)
-        {
-            if (armCollider == collider)
-                return DamageArea.LeftArm;
-        }
-
-        foreach (var armCollider in rightArmColliders)
-        {
-            if (armCollider == collider)
-                return DamageArea.RightArm;
-        }
-
-        return DamageArea.None;
+        return damageAreas[collider];
     }
 
     public DamageSurface GetDamageSurface(Collider collider)
     {
         return DamageSurface.Orginic;
     }
+    
+    
+    
 }

@@ -40,28 +40,11 @@ public class CombatSystem : MonoBehaviour
         
     }
 
-    public void RegisterMonster(IDamagable monster)
-    {
-        if (monster.MainCollider == null)
-        {
-            Debug.LogWarning($"{monster.GameObject.name}의 MainCollider가 null입니다.");
-        }
-        
-        if (monsterDic.TryAdd(monster.MainCollider, monster) == false)
-        {
-            Debug.LogWarning(
-                $"{monster.GameObject.name}가 등록 되어 있습니다."
-                + $"{monsterDic[monster.MainCollider].GameObject.name}를 대체합니다.");
-            
-            monsterDic[monster.MainCollider] = monster;
-        }
-    }
-    
     public void RegisterMonster(Collider collider, IDamagable monster)
     {
-        if (monster.MainCollider == null)
+        if (collider == null)
         {
-            Debug.LogWarning($"{monster.GameObject.name}의 MainCollider가 null입니다.");
+            Debug.LogWarning($"{monster.GameObject.name}의 Collider가 null입니다.");
         }
         
         if (monsterDic.TryAdd(collider, monster) == false)

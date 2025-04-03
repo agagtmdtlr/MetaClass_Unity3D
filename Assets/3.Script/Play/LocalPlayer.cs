@@ -10,8 +10,7 @@ public class LocalPlayer : Player, IDamagable
         Player.localPlayer = this;
     }
 
-    public Collider MainCollider { get; }
-    public GameObject GameObject { get; }
+    public GameObject GameObject => gameObject;
     public void TakeDamage(CombatEvent combatEvent)
     {
     }

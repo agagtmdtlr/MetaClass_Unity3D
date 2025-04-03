@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GrenadeLauncher : Weapon
 {
     [Header("Grenade Launcher")]
     public Transform grenadeEjectTransform;
-    
+    public float force = 10f;
     [Header("Visual")]
     public GameObject muzzleFlash;
     public float muzzleFlashDuration = 0.1f;
@@ -47,11 +48,15 @@ public class GrenadeLauncher : Weapon
         muzzleFlash.SetActive(true);
         CurrentMuzzleFlashDuration = 0f;
 
-        var grenade = ObjectPoolManager.Instance.GetObjectOrNull("Grenade") as Grenade;
+        var grenade = GetBullet() as Grenade;
+        if (grenade is null)
+        {
+            Debug.LogWarning("Grenade Launcher is missing a Grenade");
+        }
         grenade.GameObject.transform.position = grenadeEjectTransform.position;
         grenade.GameObject.transform.rotation = grenadeEjectTransform.rotation;
         grenade.Damage = data.damage;
-        grenade.Launch(20f);
+        grenade.Launch(force);
         
         return true;
     }

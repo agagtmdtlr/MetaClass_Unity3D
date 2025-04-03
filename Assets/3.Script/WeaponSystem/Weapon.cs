@@ -19,21 +19,29 @@ public abstract class Weapon : MonoBehaviour
     private bool isPoolInitialized = false;
     public Bullet GetBullet()
     {
+        if (bulletSample is null)
+        {
+            Debug.LogWarning("Bullet Sample is null");
+        }
+        
         if (isPoolInitialized is false)
         {
             bulletPool = new ObjectPool();
             bulletPool.Initialize(
-                bulletSample.GameObject.transform,
+                null,
                 bulletSample,
                 "Bullet",
                 4 
                 );
+
+            isPoolInitialized = true;
         }
         
         var bullet = bulletPool.Get() as Bullet;
+        bullet.gameObject.SetActive(true);
         bullet.weapon = this; 
 
-        return bulletPool.Get() as Bullet;
+        return bullet;
     }
     
     public void ReturnToWeapon(Bullet bullet)

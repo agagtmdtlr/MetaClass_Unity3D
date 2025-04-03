@@ -148,5 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f63f7f4501724f34b872b92205768ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
   bulletRigidbody: {fileID: 4344435952778631956}
   bulletCollider: {fileID: -8263578699200563180}
+  explosionRange: 10

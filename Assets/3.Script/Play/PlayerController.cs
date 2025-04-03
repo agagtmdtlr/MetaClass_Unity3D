@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
     private static readonly int FIRE = Animator.StringToHash("Fire");
+    private static readonly int SWAP = Animator.StringToHash("Swap");
+
 
     [Header("이동 설정")]
     public float walkSpeed = 4f;
@@ -28,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     
     public Weapon currentWeapon;
+
+    [SerializeField] private Weapon[] weapons;
     
     private CharacterController controller;
     private Vector3 velocity;
@@ -42,6 +47,26 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         
         initialCameraRotation = cameraTransform.localRotation;
+
+        EquipWeapon(weapons[0]);
+    }
+
+    void SwapWeapon(int loc)
+    {
+        if (currentWeapon.Equals(weapons[loc]) is false)
+        {
+            EquipWeapon(weapons[loc]);
+        }
+    }
+
+    void EquipWeapon(Weapon weapon)
+    {
+        currentWeapon.gameObject.SetActive(false);
+        currentWeapon = weapon;
+        currentWeapon.gameObject.SetActive(true);
+
+        animator.ResetTrigger(SWAP);
+        animator.SetTrigger(SWAP);
     }
 
     // Update is called once per frame
@@ -91,7 +116,7 @@ public class PlayerController : MonoBehaviour
     
     private void UpdateInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             bool successFire = currentWeapon.Fire();
 
@@ -101,6 +126,19 @@ public class PlayerController : MonoBehaviour
                 animator.ResetTrigger(FIRE);
                 animator.SetTrigger(FIRE);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SwapWeapon(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SwapWeapon(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SwapWeapon(2);
         }
     }
     

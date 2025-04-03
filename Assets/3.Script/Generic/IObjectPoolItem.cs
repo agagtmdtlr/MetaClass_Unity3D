@@ -39,9 +39,19 @@ public class ObjectPool
 
     private void Expand()
     {
+        var parentTransform = Parent is null ? Sample.GameObject.transform : Parent;
         for (int i = 0; i < ExpandSize; i++)
         {
-            var instance = GameObject.Instantiate(Sample.GameObject, Parent).GetComponent<IObjectPoolItem>();
+            IObjectPoolItem instance;
+            if (Parent is null)
+            {
+                instance = GameObject.Instantiate(Sample.GameObject, Vector3.zero, Quaternion.identity).GetComponent<IObjectPoolItem>();
+            }
+            else
+            {
+                instance = GameObject.Instantiate(Sample.GameObject, Parent).GetComponent<IObjectPoolItem>();
+            }
+            
             instance.Key = Sample.Key;
             Return(instance);
         }

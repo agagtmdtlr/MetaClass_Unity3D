@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class AssultRifle : Weapon
 {
-    [Header("Visual")]
-    public GameObject muzzleFlash;
-    public float muzzleFlashDuration = 0.1f;
+    
     
     [Header("Bullet Shell")]
     public Transform shellEjectTransform;
-    
-    private float CurrentMuzzleFlashDuration { get; set; }
-    
+
     private Camera mainCam;
 
     // Start is called before the first frame update
@@ -37,21 +33,12 @@ public class AssultRifle : Weapon
 
     public override bool Fire()
     {
-        if(CurrentFireRate < data.fireRate)
+        if( IsReadyToFire() == false)
             return false;
-
-        /*if (CurrentAmmo <= 0)
-            return false;*/
-
-        CurrentFireRate = 0f;
-
-        CurrentAmmo--;
         
         muzzleFlash.transform.localRotation 
             *= Quaternion.AngleAxis(Random.Range(0,360), Vector3.right);
-        
         muzzleFlash.SetActive(true);
-        CurrentMuzzleFlashDuration = 0f;
         
         // shell eject
         var shell= ObjectPoolManager.Instance.GetObjectOrNull("Shell");

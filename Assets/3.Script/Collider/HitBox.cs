@@ -16,6 +16,8 @@ public abstract class HitBox : MonoBehaviour
     private void Awake()
     {
         hitCollider = GetComponent<Collider>();
+        if(hitCollider == null)
+            Debug.LogWarning("HitBox: Collider is null");
     }
 }
 

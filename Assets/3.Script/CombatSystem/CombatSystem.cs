@@ -11,6 +11,7 @@ public class CombatSystem : MonoBehaviour
     {
         // CombatEvent가 발생하면의 의미로 씀
         public Action<CombatEvent> OnCombatEvent;
+        public Action<Weapon> OnGetWeaponEvent;
     }
     
     public static CombatSystem Instance { get; private set; }
@@ -18,6 +19,7 @@ public class CombatSystem : MonoBehaviour
     private readonly Dictionary<HitBox, IDamagable> monsterDic = new Dictionary<HitBox, IDamagable>();
 
     private readonly Queue<CombatEvent> eventQueue = new Queue<CombatEvent>();
+    private readonly Queue<Weapon> eventQueueWeapon = new Queue<Weapon>();
     
     public readonly Callbacks Events = new Callbacks();
     
@@ -72,6 +74,17 @@ public class CombatSystem : MonoBehaviour
     public IDamagable GetMonsterOrNull(HitBox monsterCollider)
     {
         return monsterDic.GetValueOrDefault(monsterCollider,null);
+    }
+    
+    public void AddWeaponEvent(Weapon weapon)
+    {
+        if (weapon == null)
+        {
+            Debug.LogWarning("Weapon이 null입니다.");
+            return;
+        }
+
+        eventQueueWeapon.Enqueue(weapon);
     }
     
     public void AddCombatEvent(CombatEvent combatEvent)

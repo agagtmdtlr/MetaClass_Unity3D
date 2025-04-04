@@ -12,3 +12,4 @@ public class CombatEvent
     public Vector3 HitNormal { get; set; }
     public HitBox HitBox { get; set; }
 }
+

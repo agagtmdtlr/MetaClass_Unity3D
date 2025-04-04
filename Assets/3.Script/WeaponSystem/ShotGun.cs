@@ -17,29 +17,16 @@ public class ShotGun : Weapon
     [Range(0f, 0.5f)] 
     public float HitRange; 
     
-    private float CurrentMuzzleFlashDuration { get; set; }
-
     void Update()
     {
         CurrentFireRate += Time.deltaTime;
         CurrentMuzzleFlashDuration += Time.deltaTime;
-
     }
     
     public override bool Fire()
     {
-        if(CurrentFireRate < data.fireRate)
+        if( IsReadyToFire() == false)
             return false;
-
-        /*if (CurrentAmmo <= 0)
-            return false;*/
-
-        CurrentFireRate = 0f;
-
-        CurrentAmmo--;
-        
-        CurrentMuzzleFlashDuration = 0f;
-
         
         for (int i = 0; i < MultipleBullets; i++)
         {

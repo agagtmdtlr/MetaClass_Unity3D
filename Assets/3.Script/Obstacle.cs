@@ -6,8 +6,6 @@ using UnityEngine.Serialization;
 public class Obstacle : MonoBehaviour, IDamagable
 {
     HitBox hitBox;
-    public DamageSurface surfaceType;
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,15 +16,5 @@ public class Obstacle : MonoBehaviour, IDamagable
     public GameObject GameObject => gameObject;
     public void TakeDamage(CombatEvent combatEvent)
     {
-    }
-
-    public DamageArea GetDamageArea(Collider collider)
-    {
-        return DamageArea.Unknown;
-    }
-
-    public DamageSurface GetDamageSurface(Collider collider)
-    {
-        return surfaceType;
     }
 }

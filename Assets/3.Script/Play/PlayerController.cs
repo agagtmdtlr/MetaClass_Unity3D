@@ -16,6 +16,7 @@ public partial class PlayerController : MonoBehaviour
     
     public Weapon currentWeapon;
 
+    [Header("무기 설정")]
     [SerializeField] private Weapon[] weapons;
     [SerializeField] private GameObject[] statesRaw;
     

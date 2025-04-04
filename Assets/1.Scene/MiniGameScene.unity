@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17479277, g: 0.2186448, b: 0.30092028, a: 1}
+  m_IndirectSpecularColor: {r: 0.17479245, g: 0.2186444, b: 0.30091953, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2351,8 +2351,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1573279542}
-  - component: {fileID: 1573279543}
   - component: {fileID: 1573279544}
+  - component: {fileID: 1573279543}
   - component: {fileID: 1573279545}
   - component: {fileID: 1573279546}
   - component: {fileID: 1573279547}

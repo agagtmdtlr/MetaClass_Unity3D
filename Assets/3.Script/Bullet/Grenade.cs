@@ -48,7 +48,7 @@ public class Grenade : Bullet
                     Damage = Damage,
                     Sender = Player.localPlayer,
                     Receiver = monster,
-                    HitPosition = transform.position,
+                    HitPosition = hitPoint,
                     HitNormal = hitNormal
                 };
                 CombatSystem.Instance.AddCombatEvent(combatEvent);

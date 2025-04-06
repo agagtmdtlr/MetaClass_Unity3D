@@ -78,6 +78,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     private void Start()
     {
+        HpBar.instance.RegisterBoss(this);
         ChangeHp(0);
         hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
         foreach (var hitbox in hitBoxes)

@@ -20,6 +20,17 @@ public class HpBar : MonoBehaviour
     public Slider monsterHpBarSample;
     Dictionary<IDamagable, GameObject> monsters = new Dictionary<IDamagable, GameObject>();
 
+    public void RegisterPlayer(LocalPlayer player)
+    {
+        player.events.OnDamage += UpdatePlayerHpBar;
+    }
+
+    public void RegisterBoss(BossMonster boss)
+    {
+        boss.events.OnDamage += UpdateBossHpBar;
+
+    }
+
     public void RegisterMonster(IDamagable damagable)
     {
         if (monsters.ContainsKey(damagable))
@@ -38,23 +49,6 @@ public class HpBar : MonoBehaviour
         }
         
         monsters.Remove(damagable);
-    }
-
-    void Start()
-    {
-        BossMonster.CurrentSceneBossMonster.events.OnDamage += UpdateBossHpBar;
-        Player.localPlayer.events.OnDamage += UpdatePlayerHpBar;
-    }
-
-    private void OnEnable()
-    {
-        
-    }
-
-    private void OnDisable()
-    {
-        BossMonster.CurrentSceneBossMonster.events.OnDamage -= UpdateBossHpBar;
-        Player.localPlayer.events.OnDamage -= UpdatePlayerHpBar;
     }
 
     private void UpdateBossHpBar(int current, int max)

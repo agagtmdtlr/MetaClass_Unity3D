@@ -30,6 +30,7 @@ public class LocalPlayer : Player, IDamagable
 
     private void Start()
     {
+        HpBar.instance.RegisterPlayer(this);
         ChangeHp(0);
         hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
         foreach (var hitbox in hitBoxes)

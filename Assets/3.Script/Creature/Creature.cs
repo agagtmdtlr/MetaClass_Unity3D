@@ -100,7 +100,9 @@ public class Creature : MonoBehaviour , IDamagable
 
     private void Start()
     {
-        StartCoroutine(UpdateMove());
+        StartCoroutine("UpdateMove");
+        
+        HpBar.instance.RegisterMonster(this);
     }
 
     private void Update()
@@ -166,10 +168,16 @@ public class Creature : MonoBehaviour , IDamagable
 
     public void TakeDamage(CombatEvent combatEvent)
     {
+
+        if (stat.hp <= 0)
+        {
+            return; // already death do noting
+        }
+        
         stat.hp -= combatEvent.Damage;
         stat.hp = Mathf.Clamp(stat.hp, 0, stat.hp);
-        
         events.OnDamage?.Invoke(stat.hp, stat.hp);
+
 
         if (stat.hp <= 0)
         {
@@ -181,6 +189,7 @@ public class Creature : MonoBehaviour , IDamagable
     {
         agent.enabled = false;
         animator.SetTrigger("Death");
+        StopCoroutine("UpdateMove");
     }
 
     private void OnEndDeath()

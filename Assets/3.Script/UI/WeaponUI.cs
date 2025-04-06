@@ -29,6 +29,7 @@ public class WeaponUI : MonoBehaviour
         CurrnetWeaponNameText.text = weapon.data.weaponName;
         CurrnetAmmoText.text = weapon.CurrentAmmo.ToString();
         MaxAmmoText.text = weapon.data.totalAmmo.ToString();
+        
         weapon.events.OnChangeAmmo += UpdateCurrentAmmo;
     }
     

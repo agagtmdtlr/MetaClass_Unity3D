@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ScratchState : BossState
 {
-    [Header("Scratch Ref")]
-    public Scratch scratch;
+    public Scratch[] scratches;
     
     private Animator animator;
     private BossMonster bossMonster;
@@ -16,8 +16,8 @@ public class ScratchState : BossState
     {
         animator = bossMonster.Animator;
         this.bossMonster = bossMonster;
-        
-        scratch.gameObject.SetActive(false);
+
+        TriggerScratch(false);
     }
 
     private void Update()
@@ -30,14 +30,23 @@ public class ScratchState : BossState
             bossMonster.ChangeState(StateName.IdleState);
         }
     }
+
+    void TriggerScratch(bool value)
+    {
+        foreach (Scratch scratch in scratches)
+        {
+            scratch.enabled = value;
+        }
+    }
     
     public override void Enter()
     {
-        scratch.gameObject.SetActive(true);
+        BossMonster.CurrentSceneBossMonster.BeginAttack();
+        TriggerScratch(true);
     }
 
     public override void Exit()
     {
-        scratch.gameObject.SetActive(false);
+        TriggerScratch(false);
     }
 }

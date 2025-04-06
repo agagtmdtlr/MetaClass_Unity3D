@@ -29,14 +29,25 @@ public abstract class Weapon : MonoBehaviour
     protected float CurrentMuzzleFlashDuration { get; set; }
 
     public abstract bool Fire();
-
+    public void Reload()
+    {
+        CurrentAmmo = data.totalAmmo;
+        events.OnChangeAmmo?.Invoke(CurrentAmmo);
+    }
+    
     public bool IsReadyToFire()
     {
-        if (CurrentFireRate >= data.fireRate)
+        if (CurrentFireRate < data.fireRate)
+        {
+            //Debug.Log("Still Ready to Fire");
             return false;
-        
+        }
+
         if (CurrentAmmo <= 0)
+        {
+            //Debug.Log("No Ammo Left");
             return false;
+        }
         
         CurrentAmmo--;
         events.OnChangeAmmo?.Invoke(CurrentAmmo);

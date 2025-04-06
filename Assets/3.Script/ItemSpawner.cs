@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -10,7 +12,12 @@ public class ItemSpawner : MonoBehaviour
 
     
     public float spawnInterval = 3f;
-    
+
+
+    private void Start()
+    {
+        StartCoroutine(SpawnCoroutine());
+    }
 
     private IEnumerator SpawnCoroutine()
     {

@@ -16,6 +16,9 @@ public class Scratch : MonoBehaviour
             return;
 
         var target = CombatSystem.Instance.GetMonsterOrNull(hitBox);
+        if (BossMonster.CurrentSceneBossMonster.IsHitted(target))
+            return;
+        
         var hitPoint = hitBox.HitCollider.ClosestPoint(transform.position);
         var hitNormal = (hitPoint - hitBox.HitCollider.bounds.center).normalized;
         CombatEvent evt = new CombatEvent()

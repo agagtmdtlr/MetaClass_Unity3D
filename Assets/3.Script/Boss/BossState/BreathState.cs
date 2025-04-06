@@ -35,7 +35,7 @@ public class BreathState : BossState
     
     public override void Enter()
     {
-        breath.ResetColliders();
+        BossMonster.CurrentSceneBossMonster.BeginAttack();
         breath.gameObject.SetActive(true);
     }
 

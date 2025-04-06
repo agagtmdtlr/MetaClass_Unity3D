@@ -38,6 +38,22 @@ public partial class BossMonster : MonoBehaviour , IDamagable
     private BossState previousState;
     private BossState currentState;
 
+    private List<IDamagable> hittedDamagables = new List<IDamagable>();
+
+    public void BeginAttack()
+    {
+        hittedDamagables.Clear();
+    }
+    public bool IsHitted(IDamagable damagable)
+    {
+        if (hittedDamagables.Contains(damagable))
+        {
+            return true;
+        }
+        hittedDamagables.Add(damagable);
+        return false;
+    }
+
     private void Awake()
     {
         Animator = GetComponentInChildren<Animator>();

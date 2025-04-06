@@ -26,13 +26,12 @@ public partial class PlayerController : MonoBehaviour , ICollector
     public Weapon currentWeapon;
 
     [Header("무기 설정")]
-    [SerializeField] private Weapon[] weapons;
     [SerializeField] private GameObject[] statesRaw;
 
     [SerializeField] private Transform ItemSocket;
     
-    private IState currentState;
-    private readonly Dictionary<string,IState> attckStates = new Dictionary<string,IState>();
+    private PlayerState currentState;
+    private readonly Dictionary<string,PlayerState> attckStates = new Dictionary<string,PlayerState>();
 
     [SerializeField] private Collider collectCollider;
 
@@ -43,10 +42,11 @@ public partial class PlayerController : MonoBehaviour , ICollector
 
     private void Start()
     {
-        //EquipWeapon(weapons[0]);
         foreach (var stateObj in statesRaw)
         {
-            var state = stateObj.GetComponent<IState>();
+            var state = stateObj.GetComponent<PlayerState>();
+            state.playerController = this;
+            state.playerAnimator = animator;
             attckStates[state.StateType] = state;
         }
         ToAttackState("Attack");
@@ -57,30 +57,24 @@ public partial class PlayerController : MonoBehaviour , ICollector
     
     public void ToAttackState(string toType)
     {
-        if(currentState != null)
-            currentState.Exit();
-        
-        currentState = attckStates[toType];
-        currentState.Enter();
-    }
-
-    public bool CanSwap(int loc)
-    {
-        return (currentWeapon.Equals(weapons[loc]) is false);
-    }
-
-    public void SwapWeapon(int loc)
-    {
-        if (currentWeapon.Equals(weapons[loc]) is false)
+        if (currentState != null)
         {
-            EquipWeapon(weapons[loc]);
+            currentState.gameObject.SetActive(false);
+            currentState.Exit();
         }
+
+        currentState = attckStates[toType];
+        currentState.gameObject.SetActive(true);
+        currentState.Enter();
     }
 
     void EquipWeapon(Weapon weapon)
     {
-        if(currentWeapon != null)
-            currentWeapon.gameObject.SetActive(false);
+        if (currentWeapon is not null)
+        {
+            Debug.Log($"Destroy {currentWeapon.gameObject.name}");
+            Destroy(currentWeapon.gameObject);
+        }
         
         currentWeapon = weapon;
         currentWeapon.gameObject.SetActive(true);
@@ -89,30 +83,13 @@ public partial class PlayerController : MonoBehaviour , ICollector
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.transform.localRotation = Quaternion.Euler(new Vector3(90,0,0));
 
-        animator.ResetTrigger(SWAP);
-        animator.SetTrigger(SWAP);
-        
+        ToAttackState("Swap");
         PlayerEvents.OnEquipWeapon?.Invoke(currentWeapon);
     }
 
     public void GetItem(ItemEvent itemEvent)
     {
-        switch (itemEvent.Item)
-        {
-            case Item.ItemType.Unknown:
-                break;
-            case Item.ItemType.AssaultRifle:
-                break;
-            case Item.ItemType.GrenadeLauncher:
-                break;
-            case Item.ItemType.Shotgun:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-        
         var weapon = ItemFactory.instance.Create(itemEvent.Item);
         EquipWeapon(weapon);
-        
     }
 }

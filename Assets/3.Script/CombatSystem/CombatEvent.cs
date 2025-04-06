@@ -13,3 +13,4 @@ public class CombatEvent
     public HitBox HitBox { get; set; }
 }
 
+

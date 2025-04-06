@@ -6,7 +6,7 @@ using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public partial class BossMonster : MonoBehaviour , IDamagable
+public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 {
     public class BaseStat
     {
@@ -45,13 +45,17 @@ public partial class BossMonster : MonoBehaviour , IDamagable
     {
         hittedDamagables.Clear();
     }
+
+    public void AddHitted(IDamagable target)
+    {
+        hittedDamagables.Add(target);
+    }
     public bool IsHitted(IDamagable damagable)
     {
         if (hittedDamagables.Contains(damagable))
         {
             return true;
         }
-        hittedDamagables.Add(damagable);
         return false;
     }
 

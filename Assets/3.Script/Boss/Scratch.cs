@@ -6,7 +6,6 @@ using UnityEngine;
 public class Scratch : MonoBehaviour
 {
     [SerializeField] int Damage = 1;
-    public Collider Collider;
     
     private void OnTriggerEnter(Collider other)
     {
@@ -18,6 +17,8 @@ public class Scratch : MonoBehaviour
         var target = CombatSystem.Instance.GetMonsterOrNull(hitBox);
         if (BossMonster.CurrentSceneBossMonster.IsHitted(target))
             return;
+        
+        BossMonster.CurrentSceneBossMonster.AddHitted(target);
         
         var hitPoint = hitBox.HitCollider.ClosestPoint(transform.position);
         var hitNormal = (hitPoint - hitBox.HitCollider.bounds.center).normalized;

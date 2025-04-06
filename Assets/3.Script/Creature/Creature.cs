@@ -38,6 +38,8 @@ public class Creature : MonoBehaviour , IDamagable
     [SerializeField] private AnimStateEventListener listener;
     [SerializeField] private float relaxTime;
     
+    Coroutine updateCoroutine;
+    
     private void Awake()
     {
         hitboxes = GetComponentsInChildren<HitBox>(true).ToList();
@@ -100,21 +102,22 @@ public class Creature : MonoBehaviour , IDamagable
 
     private void Start()
     {
-        StartCoroutine("UpdateMove");
+        if(agent is not null)
+            updateCoroutine = StartCoroutine(UpdateMove());
+        else
+            updateCoroutine = StartCoroutine(UpdateIdle());
         
         HpBar.instance.RegisterMonster(this);
     }
 
-    private void Update()
+
+    private IEnumerator UpdateIdle()
     {
-        var curspeed = agent.speed;
-        if (agent.hasPath)
+        while (gameObject.activeInHierarchy)
         {
-            animator.SetFloat("Speed", 1f);
-        }
-        else
-        {
-            animator.SetFloat("Speed", 0f);
+            var targetPos = Player.localPlayer.transform.position;
+            yield return StartCoroutine(UpdateAttack());
+            yield return new WaitForSeconds(relaxTime);
         }
     }
 
@@ -130,7 +133,11 @@ public class Creature : MonoBehaviour , IDamagable
                 yield return null;
 
             while (agent.hasPath)
+            {
+                animator.SetFloat("Speed", 1f);
                 yield return null;
+            }
+            animator.SetFloat("Speed", 0f);
 
             var dist = Player.localPlayer.transform.position - transform.position;
             if (dist.magnitude < 0.5f)
@@ -168,7 +175,6 @@ public class Creature : MonoBehaviour , IDamagable
 
     public void TakeDamage(CombatEvent combatEvent)
     {
-
         if (stat.hp <= 0)
         {
             return; // already death do noting
@@ -187,9 +193,11 @@ public class Creature : MonoBehaviour , IDamagable
 
     public void OnDeath()
     {
-        agent.enabled = false;
+        if(agent is not null)
+            agent.enabled = false;
+        
         animator.SetTrigger("Death");
-        StopCoroutine("UpdateMove");
+        StopAllCoroutines();
     }
 
     private void OnEndDeath()

@@ -6,12 +6,43 @@ using UnityEngine.UI;
 
 public class HpBar : MonoBehaviour
 {
+    public static HpBar instance;
+    
     public Slider BossHpBarSlider;
     public Slider PlayerHpBarSlider;
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        instance = this;
+    }
+    
+    
+    public Slider monsterHpBarSample;
+    Dictionary<IDamagable, GameObject> monsters = new Dictionary<IDamagable, GameObject>();
+
+    public void RegisterMonster(IDamagable damagable)
+    {
+        if (monsters.ContainsKey(damagable))
+        {
+            Debug.LogError($"Damagable already exists: {damagable.GameObject.name}");
+            return;
+        }
+    }
+
+    public void UnregisterMonster(IDamagable damagable)
+    {
+        if (monsters.ContainsKey(damagable) == false)
+        {
+            Debug.LogError($"Damagable does not exists: {damagable.GameObject.name}");
+            return;
+        }
+        
+        monsters.Remove(damagable);
+    }
+
     void Start()
     {
-        BossMonster.CurrentSceneBossMonster.Event.OnDamage += UpdateBossHpBar;
+        BossMonster.CurrentSceneBossMonster.events.OnDamage += UpdateBossHpBar;
         Player.localPlayer.events.OnDamage += UpdatePlayerHpBar;
     }
 
@@ -22,9 +53,8 @@ public class HpBar : MonoBehaviour
 
     private void OnDisable()
     {
-        BossMonster.CurrentSceneBossMonster.Event.OnDamage -= UpdateBossHpBar;
+        BossMonster.CurrentSceneBossMonster.events.OnDamage -= UpdateBossHpBar;
         Player.localPlayer.events.OnDamage -= UpdatePlayerHpBar;
-
     }
 
     private void UpdateBossHpBar(int current, int max)

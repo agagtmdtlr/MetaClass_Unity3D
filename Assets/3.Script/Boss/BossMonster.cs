@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public partial class BossMonster : MonoBehaviour , IDamagable
 {
@@ -13,7 +14,8 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         public int CurrentHp { get; set; }
         public int CurrentHitCount { get; set; }
     }
-    
+    public int hp;
+
     public class Events
     {
         /// <summary>
@@ -22,18 +24,17 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         public Action<int,int> OnDamage;
         public Action<BossState.StateName> OnChangedState;
     }
-    
+    public readonly Events events = new Events();
+
     public GameObject GameObject => gameObject;
  
-    public Events Event = new Events();
-    public BaseStat BossStat = new BaseStat();
+    public readonly BaseStat stat = new BaseStat();
     private List<HitBox> hitBoxes;
     
     public Animator Animator { get; private set; }
     private Dictionary<BossState.StateName, BossState> stateDic 
         = new Dictionary<BossState.StateName, BossState>();
     
-    public int Hp;
     
     private BossState previousState;
     private BossState currentState;
@@ -57,7 +58,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable
     private void Awake()
     {
         Animator = GetComponentInChildren<Animator>();
-        BossStat.CurrentHp = Hp;
+        stat.CurrentHp = hp;
         CurrentSceneBossMonster = this;
 
         BossState[] myState =  gameObject.GetComponentsInChildren<BossState>(true);
@@ -111,11 +112,11 @@ public partial class BossMonster : MonoBehaviour , IDamagable
     
     public void ChangeHp(int amount)
     {
-        BossStat.CurrentHp += amount;
-        BossStat.CurrentHp = Mathf.Clamp(BossStat.CurrentHp, 0, Hp);
-        Event.OnDamage?.Invoke(BossStat.CurrentHp, Hp);
+        stat.CurrentHp += amount;
+        stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, hp);
+        events.OnDamage?.Invoke(stat.CurrentHp, hp);
 
-        if (BossStat.CurrentHp <= 0)
+        if (stat.CurrentHp <= 0)
         {
             Animator.ResetTrigger(SCRATCH);
             Animator.ResetTrigger(BREATH);
@@ -124,10 +125,10 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         }
         else
         {
-            BossStat.CurrentHitCount++;
-            if (BossStat.CurrentHitCount >= BaseStat.HIT_COUNT)
+            stat.CurrentHitCount++;
+            if (stat.CurrentHitCount >= BaseStat.HIT_COUNT)
             {
-                BossStat.CurrentHitCount = 0;
+                stat.CurrentHitCount = 0;
                 Animator.SetTrigger(HIT);
             }
         }

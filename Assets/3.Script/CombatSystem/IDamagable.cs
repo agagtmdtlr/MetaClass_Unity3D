@@ -10,6 +10,8 @@ public enum DamageArea
     Body,
     LeftArm,
     RightArm,
+    LeftLeg,
+    RightLeg
 }
 
 public enum DamageSurface

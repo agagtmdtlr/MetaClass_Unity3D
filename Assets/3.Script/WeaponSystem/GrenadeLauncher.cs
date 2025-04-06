@@ -8,9 +8,10 @@ public class GrenadeLauncher : Weapon
     [Header("Grenade Launcher")]
     public Transform grenadeEjectTransform;
     public float force = 10f;
-    
-    void Start()
+
+    protected override void Start()
     {
+        base.Start();
         muzzleFlash.SetActive(false);
     }
     

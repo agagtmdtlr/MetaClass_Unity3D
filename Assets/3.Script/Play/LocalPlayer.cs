@@ -36,6 +36,12 @@ public class LocalPlayer : Player, IDamagable
         {
             CombatSystem.Instance.RegisterMonster(hitbox, this);
         }
+        CombatSystem.Instance.Events.OnDeathEvent += OnDeathEvent;
+    }
+    
+    private void OnDeathEvent(DeathEvent obj)
+    {
+        ChangeHp(5);
     }
 
     public GameObject GameObject => gameObject;

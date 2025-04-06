@@ -11,10 +11,10 @@ public class FollowUIController : MonoBehaviour
 
     void Start()
     {
-        CombatSystem.Instance.Events.OnCombatEvent += PrintText;
+        CombatSystem.Instance.Events.OnTakeDamageEvent += PrintDamageText;
     }
 
-    void PrintText(CombatEvent combatEvent)
+    void PrintDamageText(TakeDamageEvent damageEvent)
     {
         var item = ObjectPoolManager.Instance.GetObjectOrNull("FollowUI");
         if (item == null)
@@ -29,17 +29,17 @@ public class FollowUIController : MonoBehaviour
         {
             Debug.LogError("Target is null");
         }
-        tweener.transform.position = combatEvent.HitPosition;
+        tweener.transform.position = damageEvent.HitPosition;
         tweener.Set(Vector3.up, Random.Range(5f,10f),duration);
         
         
         Transform targetTransform = tweener.transform;
-        Color color = GetDamageAreaColor(combatEvent.HitBox.DamageArea);
+        Color color = GetDamageAreaColor(damageEvent.HitBox.DamageArea);
 
         var followUI = item as FollowUI;
         if( followUI is null)
             Debug.LogWarning("followUI is null");
-        followUI.Set(targetTransform, combatEvent.Damage.ToString(), duration,color );
+        followUI.Set(targetTransform, damageEvent.Damage.ToString(), duration,color );
     }
 
     Color GetDamageAreaColor(DamageArea area)

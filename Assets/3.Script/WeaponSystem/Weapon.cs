@@ -62,6 +62,23 @@ public abstract class Weapon : MonoBehaviour
         CurrentAmmo = data.totalAmmo;
     }
 
+    protected virtual void Start()
+    {
+        CombatSystem.Instance.Events.OnDeathEvent += OnDeathEvent;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        CombatSystem.Instance.Events.OnDeathEvent -= OnDeathEvent;
+    }
+
+    private void OnDeathEvent(DeathEvent deathEvent)
+    {
+        CurrentAmmo += 5;
+        CurrentAmmo = Mathf.Min(CurrentAmmo, data.totalAmmo);
+        events.OnChangeAmmo?.Invoke(CurrentAmmo);
+    }
+
     private bool isPoolInitialized = false;
     public Bullet GetBullet()
     {

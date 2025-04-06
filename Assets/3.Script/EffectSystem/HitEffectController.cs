@@ -10,7 +10,7 @@ public class HitEffectController : MonoBehaviour
     void Start()
     {
         //CombatSystem.Instance.Events.OnCombatEvent += PlayBlood;
-        CombatSystem.Instance.Events.OnCombatEvent += PlayHitEffect;
+        CombatSystem.Instance.Events.OnTakeDamageEvent += PlayHitEffect;
     }
 
     private void OnDestroy()
@@ -18,9 +18,9 @@ public class HitEffectController : MonoBehaviour
         //CombatSystem.Instance.Events.OnCombatEvent -= PlayBlood;
     }
 
-    private void PlayHitEffect(CombatEvent combatEvent)
+    private void PlayHitEffect(TakeDamageEvent damageEvent)
     {
-        var surface = combatEvent.HitBox.DamageSurface;
+        var surface = damageEvent.HitBox.DamageSurface;
 
         string key;
         switch (surface)
@@ -44,17 +44,8 @@ public class HitEffectController : MonoBehaviour
             Debug.LogError(key + " couldn't find effect with type: " + surface);
         }
         
-        effect.GameObject.transform.position = combatEvent.HitPosition;
-        effect.GameObject.transform.forward = combatEvent.HitNormal;
+        effect.GameObject.transform.position = damageEvent.HitPosition;
+        effect.GameObject.transform.forward = damageEvent.HitNormal;
         effect.GameObject.SetActive(true);
-    }
-
-    private void PlayBlood(CombatEvent combatEvent)
-    {
-        var blood = ObjectPoolManager.Instance.GetObjectOrNull("Blood");
-        
-        
-        blood.GameObject.transform.position = combatEvent.HitPosition;
-        blood.GameObject.SetActive(true);
     }
 }

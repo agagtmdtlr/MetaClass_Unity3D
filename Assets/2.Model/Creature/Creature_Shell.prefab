@@ -1144,10 +1144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a56913e706e8474da46e6d7c552f1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveType: 1
+  attackType: 1
   hp: 100
   animator: {fileID: 5926048785676983787}
   agent: {fileID: 2183823874223079449}
   listener: {fileID: 1783374378129255595}
+  relaxTime: 1
+  isAttacking: 0
 --- !u!195 &2183823874223079449
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1167,7 +1171,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: -0.08
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &1783374378129255595

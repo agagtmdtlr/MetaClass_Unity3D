@@ -4,12 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class Creature : MonoBehaviour , IDamagable
 {
+    [System.Serializable]
+    public enum MoveType
+    {
+        None,
+        NavMeshAgent
+    }
+    public MoveType moveType = MoveType.None;
+    
+    [System.Serializable]
+    public enum AttackType
+    {
+        Melee,
+        Ranged
+    }
+    public AttackType attackType = AttackType.Melee;
+    
     private static readonly int ATTACK_INDEX = Animator.StringToHash("AttackIndex");
     private static readonly int ATTACK = Animator.StringToHash("Attack");
     public int hp = 1000;
@@ -38,9 +55,13 @@ public class Creature : MonoBehaviour , IDamagable
     [SerializeField] private AnimStateEventListener listener;
     public float relaxTime;
     
-    Coroutine updateCoroutine;
+    Coroutine updateMoveCoroutine;
+    Coroutine updateAttackCoroutine;
     [HideInInspector] public bool isAttacking = false;
 
+    public IAttackStrategy AttackStrategy;
+    public IMoveStrategy MoveStrategy;
+    
     private void Awake()
     {
         hitboxes = GetComponentsInChildren<HitBox>(true).ToList();
@@ -90,7 +111,6 @@ public class Creature : MonoBehaviour , IDamagable
         var sracths = ScratchesPerArea[key];
         foreach (var scratch in sracths)
             scratch.enabled = true;
-        
     }
 
     private void EndAttack(string key)
@@ -103,23 +123,9 @@ public class Creature : MonoBehaviour , IDamagable
 
     private void Start()
     {
-        if(agent is not null)
-            updateCoroutine = StartCoroutine(UpdateMove());
-        else
-            updateCoroutine = StartCoroutine(UpdateIdle());
-        
+        updateMoveCoroutine = StartCoroutine(UpdateMove());
+        updateAttackCoroutine  = StartCoroutine(UpdateAttack());
         HpBar.instance.RegisterMonster(this);
-    }
-
-
-    private IEnumerator UpdateIdle()
-    {
-        while (gameObject.activeInHierarchy)
-        {
-            var targetPos = Player.localPlayer.transform.position;
-            yield return StartCoroutine(UpdateAttack());
-            yield return new WaitForSeconds(relaxTime);
-        }
     }
 
     private IEnumerator UpdateMove()
@@ -128,39 +134,37 @@ public class Creature : MonoBehaviour , IDamagable
         {
             var targetPos = Player.localPlayer.transform.position;
             agent.SetDestination(targetPos);
-            yield return null;
+            animator.SetFloat("Speed", 1f);
             
-            while (agent.pathPending)
-                yield return null;
-
-            while (agent.hasPath)
-            {
-                animator.SetFloat("Speed", 1f);
-                yield return null;
-            }
-            animator.SetFloat("Speed", 0f);
-
-            var dist = Player.localPlayer.transform.position - transform.position;
-            if (dist.magnitude < 0.5f)
-            {
-                yield return StartCoroutine(UpdateAttack());
-            }
             yield return new WaitForSeconds(relaxTime);
         }
     }
 
     private IEnumerator UpdateAttack()
     {
-        int attackIndex = Random.Range(0, 2);
-        animator.SetInteger(ATTACK_INDEX, attackIndex);
-        animator.ResetTrigger(ATTACK);
-        animator.SetTrigger(ATTACK);
-        
-        isAttacking = true;
-        while (isAttacking)
+        while (gameObject.activeInHierarchy)
         {
-            yield return null;
+            var dist = Player.localPlayer.transform.position - transform.position;
+            if (dist.magnitude > 1f)
+            {
+                yield return null;
+                continue;
+            }
+            
+            int attackIndex = Random.Range(0, 2);
+            animator.SetInteger(ATTACK_INDEX, attackIndex);
+            animator.ResetTrigger(ATTACK);
+            animator.SetTrigger(ATTACK);
+        
+            isAttacking = true;
+            while (isAttacking)
+            {
+                yield return null;
+            }
+            
         }
+        
+        
         
     }
 
@@ -180,7 +184,35 @@ public class Creature : MonoBehaviour , IDamagable
             return; // already death do noting
         }
         
-        stat.hp -= combatEvent.Damage;
+        var damage =combatEvent.Damage;
+        switch (combatEvent.HitBox.DamageArea)
+        {
+            case DamageArea.Head:
+                damage *= 2;
+                break;
+            case DamageArea.Body:
+                break;
+            case DamageArea.LeftArm:
+            case DamageArea.RightArm:
+            case DamageArea.LeftLeg:
+            case DamageArea.RightLeg:
+                damage += damage / 2;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+        TakeDamageEvent evt = new TakeDamageEvent()
+        {
+            Taker = this,
+            Damage = damage,
+            HitPosition = combatEvent.HitPosition,
+            HitNormal = combatEvent.HitNormal,
+            HitBox = combatEvent.HitBox
+        };
+        CombatSystem.Instance.AddTakeDamageEvent(evt);
+        
+        stat.hp -= damage;
         stat.hp = Mathf.Clamp(stat.hp, 0, stat.hp);
         events.OnDamage?.Invoke(stat.hp, stat.hp);
 
@@ -198,6 +230,13 @@ public class Creature : MonoBehaviour , IDamagable
         
         animator.SetTrigger("Death");
         StopAllCoroutines();
+
+        DeathEvent evt = new DeathEvent()
+        {
+            Dead = this,
+            DeathPosition = transform.position
+        };
+        CombatSystem.Instance.AddDeathEvent(evt);
     }
 
     private void OnEndDeath()

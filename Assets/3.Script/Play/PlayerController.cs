@@ -52,9 +52,12 @@ public partial class PlayerController : MonoBehaviour , ICollector
         ToAttackState("Attack");
 
         ItemSystem.Instance.RegisterCollector(collectCollider, this);
+        
     }
-    
-    
+
+
+
+
     public void ToAttackState(string toType)
     {
         if (currentState != null)

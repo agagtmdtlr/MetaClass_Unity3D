@@ -96,7 +96,34 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     public void TakeDamage(CombatEvent combatEvent)
     {
-        ChangeHp(-combatEvent.Damage);
+        var damage =combatEvent.Damage;
+        switch (combatEvent.HitBox.DamageArea)
+        {
+            case DamageArea.Head:
+                damage *= 2;
+                break;
+            case DamageArea.Body:
+                break;
+            case DamageArea.LeftArm:
+            case DamageArea.RightArm:
+            case DamageArea.LeftLeg:
+            case DamageArea.RightLeg:
+                damage += damage / 2;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+        TakeDamageEvent evt = new TakeDamageEvent()
+        {
+            Taker = this,
+            Damage = damage,
+            HitPosition = combatEvent.HitPosition,
+            HitNormal = combatEvent.HitNormal,
+            HitBox = combatEvent.HitBox
+        };
+        CombatSystem.Instance.AddTakeDamageEvent(evt);
+        ChangeHp(-damage);
     }
 
     public void ChangeState(BossState.StateName state)

@@ -12,8 +12,9 @@ public class AssultRifle : Weapon
     private Camera mainCam;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         mainCam = Camera.main;
         muzzleFlash.SetActive(false);
     }

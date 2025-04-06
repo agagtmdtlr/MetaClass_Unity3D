@@ -36,10 +36,11 @@ public class Creature : MonoBehaviour , IDamagable
         = new Dictionary<string, List<Scratch>>();
     
     [SerializeField] private AnimStateEventListener listener;
-    [SerializeField] private float relaxTime;
+    public float relaxTime;
     
     Coroutine updateCoroutine;
-    
+    [HideInInspector] public bool isAttacking = false;
+
     private void Awake()
     {
         hitboxes = GetComponentsInChildren<HitBox>(true).ToList();
@@ -148,7 +149,6 @@ public class Creature : MonoBehaviour , IDamagable
         }
     }
 
-    bool isAttacking = false;
     private IEnumerator UpdateAttack()
     {
         int attackIndex = Random.Range(0, 2);

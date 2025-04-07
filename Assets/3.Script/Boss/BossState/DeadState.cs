@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeadState : BossState
 {
-    public override StateName Name => StateName.DeadState;
+    public override StateName StateType => StateName.DeadState;
     
     public override void Initialize(BossMonster bossMonster)
     {
@@ -13,6 +13,11 @@ public class DeadState : BossState
 
     public override void Enter()
     {
+    }
+
+    public override void Update()
+    {
+        
     }
 
     public override void Exit()

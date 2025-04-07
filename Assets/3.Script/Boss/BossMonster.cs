@@ -65,7 +65,8 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
         {
             var state = myState[i];
             state.Initialize(this);
-            stateDic.Add(state.Name, state);
+            state.gameObject.SetActive(false);
+            stateDic.Add(state.StateType, state);
         }
             
         ChangeState(BossState.StateName.IdleState);

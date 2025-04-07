@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SwapState : PlayerState
 {
-    private static readonly int SWAP = Animator.StringToHash("Swap");
 
     public PlayerController player;
     [SerializeField] private Animator animator;
@@ -13,8 +12,8 @@ public class SwapState : PlayerState
 
     public override void Enter()
     {
-        animator.ResetTrigger(SWAP);
-        animator.SetTrigger(SWAP);
+        animator.ResetTrigger(  PlayerController.SWAP);
+        animator.SetTrigger(PlayerController.SWAP);
     }
 
     public override void Update()
@@ -22,10 +21,6 @@ public class SwapState : PlayerState
     }
 
     public override void Exit()
-    {
-    }
-
-    public override void Transition()
     {
     }
 }

@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BossState : MonoBehaviour
+public abstract class BossState : MonoBehaviour , IState<BossState.StateName, BossMonster>
 {
     public enum StateName
     {
         IdleState,
         ScratchState,
         BreathState,
+        SummonState,
         DeadState,
-        SummonState
     }
 
     protected Animator Animator { get; private set; }
-    protected BossMonster BossMonster { get; private set; }
-
-    
-    public abstract StateName Name { get; }
+    private BossMonster bossMonster;
+    public BossMonster Context => bossMonster;
+    public abstract StateName StateType { get; }
 
     public string AnimatorStateName;
     public float ExitTime;
@@ -25,10 +24,12 @@ public abstract class BossState : MonoBehaviour
     protected void InitializeDefault(BossMonster bossMonster)
     {
         Animator = bossMonster.Animator;
-        this.BossMonster = bossMonster;
+        this.bossMonster = bossMonster;
     }
     
     public abstract void Initialize(BossMonster bossMonster);
     public abstract void Enter();
+    public abstract void Update();
+
     public abstract void Exit();
 }

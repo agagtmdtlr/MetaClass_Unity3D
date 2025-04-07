@@ -7,8 +7,11 @@ public class BreathState : BossState
     [Header("Breath Ref")]
     public Breath breath;
     public Transform breathPoint;
+    
+    [Range(0f, 1f)]
+    public float breathTime;
 
-    public override StateName Name => StateName.BreathState;
+    public override StateName StateType => StateName.BreathState;
     
     public override void Initialize(BossMonster bossMonster)
     {
@@ -18,21 +21,26 @@ public class BreathState : BossState
         breath.gameObject.SetActive(false);
     }
 
-    private void Update()
+    public override void Update()
     {
         var currentState = Animator.GetCurrentAnimatorStateInfo(0);
         if (currentState.IsName(AnimatorStateName) == false) return;
 
+        if (currentState.normalizedTime > breathTime && breath.gameObject.activeSelf == false)
+        {
+            breath.gameObject.SetActive(true);
+        }
+        
         if (currentState.normalizedTime > ExitTime)
         {
-            BossMonster.ChangeState(StateName.IdleState);
+            Context.ChangeState(StateName.IdleState);
         }
     }
     
     public override void Enter()
     {
-        BossMonster.CurrentSceneBossMonster.BeginAttack();
-        breath.gameObject.SetActive(true);
+        Context.BeginAttack();
+        breath.ResetColliders();
     }
 
     public override void Exit()

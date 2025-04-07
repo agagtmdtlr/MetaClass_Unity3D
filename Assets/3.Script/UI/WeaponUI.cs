@@ -19,11 +19,6 @@ public class WeaponUI : MonoBehaviour
         Player.localPlayer.events.OnEquipWeapon += UpdateWeapon;
     }
 
-    private void OnDisable()
-    {
-        Player.localPlayer.events.OnEquipWeapon -= UpdateWeapon;
-    }
-    
     void UpdateWeapon(Weapon weapon)
     {
         CurrnetWeaponNameText.text = weapon.data.weaponName;

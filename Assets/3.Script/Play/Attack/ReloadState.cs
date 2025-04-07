@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class ReloadState : PlayerState
 {
-    private static readonly int RELOAD = Animator.StringToHash("Reload");
     public override string StateType => "Reload";
     public override void Enter()
     {
-        playerAnimator.ResetTrigger(RELOAD);
-        playerAnimator.SetTrigger(RELOAD);
+        PlayerAnimator.ResetTrigger(PlayerController.RELOAD);
+        PlayerAnimator.SetTrigger(PlayerController.RELOAD);
     }
 
     public override void Update()
     {
-        Transition();
     }
 
     public override void Exit()
-    {
-    }
-
-    public override void Transition()
     {
     }
 

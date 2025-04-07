@@ -1,28 +1,26 @@
+using System;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] private Weapon.WeaponType weaponType;
-    [SerializeField] private GameObject weaponPrefab;
-    [SerializeField] private Transform weaponTransform;
-    [SerializeField] private Transform bulletSpawnPoint;
-    [SerializeField] private float fireRate = 0.5f;
+    [SerializeField] Weapon assaultRifle;
+    [SerializeField] Weapon grenadeLauncher;
+    [SerializeField] Weapon shotgun;
 
-    private float nextFireTime;
-
-    public void Fire()
+    public Weapon GetWeapon(Weapon.WeaponType weaponType)
     {
-        if (Time.time >= nextFireTime)
+        switch (weaponType)
         {
-            nextFireTime = Time.time + fireRate;
-            Shoot();
+            case Weapon.WeaponType.AssaultRifle:
+                return assaultRifle;
+            case Weapon.WeaponType.GrenadeLauncher:
+                return grenadeLauncher;
+            case Weapon.WeaponType.Shotgun:
+                return shotgun;
+            default:
+                Debug.LogWarning($"invalid weapon type: {weaponType}");
+                return null;
         }
-    }
-
-    private void Shoot()
-    {
-        // Implement shooting logic here
-        Debug.Log($"Firing {weaponType} from {weaponPrefab.name}");
     }
         
 }

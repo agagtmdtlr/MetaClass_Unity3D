@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MonsterSpawner : MonoBehaviour
+public class CreatureSpawner : MonoBehaviour
 {
     [SerializeField] Creature[] creatures;
     [SerializeField] Transform[] spawnPoints;
@@ -12,12 +12,20 @@ public class MonsterSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(SpawnRoutine());
     }
 
     private void OnDisable()
     {
-        StopAllCoroutines();
+    }
+
+    public void Spawn()
+    {
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            var selectedCreature = creatures[Random.Range(0, creatures.Length)];
+            var spawnPoint = spawnPoints[i];            
+            var creature = Instantiate(selectedCreature, spawnPoint.position, Quaternion.identity);
+        }
     }
 
     private IEnumerator SpawnRoutine()

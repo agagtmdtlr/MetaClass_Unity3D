@@ -7,7 +7,7 @@ public class ScratchState : BossState
 {
     public Scratch[] scratches;
     
-    public override StateName Name => StateName.ScratchState;
+    public override StateName StateType => StateName.ScratchState;
 
     public override void Initialize(BossMonster bossMonster)
     {
@@ -15,14 +15,14 @@ public class ScratchState : BossState
         TriggerScratch(false);
     }
 
-    private void Update()
+    public override void Update()
     {
         var currentState = Animator.GetCurrentAnimatorStateInfo(0);
         if (currentState.IsName(AnimatorStateName) == false) return;
 
         if (currentState.normalizedTime > ExitTime)
         {
-            BossMonster.ChangeState(StateName.IdleState);
+            Context.ChangeState(StateName.IdleState);
         }
     }
 
@@ -36,7 +36,7 @@ public class ScratchState : BossState
     
     public override void Enter()
     {
-        BossMonster.CurrentSceneBossMonster.BeginAttack();
+        Context.BeginAttack();
         TriggerScratch(true);
     }
 

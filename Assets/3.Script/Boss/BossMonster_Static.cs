@@ -7,19 +7,21 @@ using UnityEngine;
 
 public partial class BossMonster
 {
+    private static BossMonster _currentSceneBossMonster;
+
     public static BossMonster CurrentSceneBossMonster
     {
         get
         {
-            if (CurrentSceneBossMonster == null)
+            if (_currentSceneBossMonster == null)
             {
-                CurrentSceneBossMonster = FindObjectOfType<BossMonster>(true);
+                _currentSceneBossMonster = FindObjectOfType<BossMonster>(true);
             }
-            return CurrentSceneBossMonster;
+            return _currentSceneBossMonster;
         }
         set 
         {
-            CurrentSceneBossMonster = value;
+            _currentSceneBossMonster = value;
         }
     }
 

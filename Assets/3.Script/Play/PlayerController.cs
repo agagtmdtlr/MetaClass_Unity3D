@@ -7,9 +7,6 @@ using UnityEngine.Serialization;
 
 public partial class PlayerController : MonoBehaviour
 {
-    private static readonly int FIRE = Animator.StringToHash("Fire");
-    private static readonly int SWAP = Animator.StringToHash("Swap");
-
     [Header("Animator")]
     public Animator animator;
 
@@ -25,8 +22,8 @@ public partial class PlayerController : MonoBehaviour
         foreach (var stateObj in statesRaw)
         {
             var state = stateObj.GetComponent<PlayerState>();
-            state.playerController = this;
-            state.playerAnimator = animator;
+            state.Context = this;
+            state.PlayerAnimator = animator;
             attckStates[state.StateType] = state;
         }
         PlayAttackAnimation();

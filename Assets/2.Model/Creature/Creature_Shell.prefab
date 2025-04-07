@@ -1146,7 +1146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveType: 1
   attackType: 1
-  hp: 100
+  hp: 20
   animator: {fileID: 5926048785676983787}
   agent: {fileID: 2183823874223079449}
   listener: {fileID: 1783374378129255595}

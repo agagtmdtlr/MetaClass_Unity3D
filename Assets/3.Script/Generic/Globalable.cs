@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class Globalable<TValue> : MonoBehaviour  where TValue : class
 {
+    private static TValue _instance;
     public static TValue Instance
     {
         get
         {
-            if (Instance == null)
+            if (_instance == null)
             {
-                Instance = FindObjectOfType<Globalable<TValue>>(true) as TValue;
-                if (Instance == null)
+                _instance = FindObjectOfType<Globalable<TValue>>(true) as TValue;
+                if (_instance == null)
                 {
                     Debug.LogError($"No instance of {typeof(TValue).Name} found in the scene.");
                 }
             }
 
-            return Instance;
+            return _instance;
         }
         protected set
         {
-            Instance = value;
+            _instance = value;
         }
     }
     

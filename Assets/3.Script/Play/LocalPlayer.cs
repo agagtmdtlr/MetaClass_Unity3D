@@ -6,7 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class LocalPlayer : Player, IDamagable
+public class LocalPlayer : Player, IDamagable 
 {
     public class Events
     {
@@ -27,8 +27,8 @@ public class LocalPlayer : Player, IDamagable
     
     public Weapon currentWeapon;
     public AnimStateEventListener animStateEventListener;
-    
-    [SerializeField] private Transform ItemSocket;
+
+    [SerializeField] private WeaponController weaponController;
     
     private void Awake()
     {
@@ -86,25 +86,19 @@ public class LocalPlayer : Player, IDamagable
     {
         if (currentWeapon is not null)
         {
-            Debug.Log($"Destroy {currentWeapon.gameObject.name}");
-            Destroy(currentWeapon.gameObject);
+            currentWeapon.gameObject.SetActive(false);
         }
         
         events.OnStartedChangeWeapon?.Invoke();
         currentWeapon = weapon;
         currentWeapon.gameObject.SetActive(true);
-        
-        currentWeapon.transform.SetParent(ItemSocket);
-        currentWeapon.transform.localPosition = Vector3.zero;
-        currentWeapon.transform.localRotation = Quaternion.Euler(new Vector3(90,0,0));
-
         events.OnEquipWeapon(currentWeapon);
     }
 
     public void ChangeWeapon(Weapon.WeaponType weaponType)
     {
         Debug.Log($"Change Weapon {weaponType}");
-        var weapon = WeaponFactory.Instance.Create(weaponType);
+        var weapon = weaponController.GetWeapon(weaponType);
         EquipWeapon(weapon);
     }
 

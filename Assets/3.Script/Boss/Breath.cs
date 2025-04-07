@@ -13,6 +13,7 @@ public class Breath : MonoBehaviour
     private List<Collider> colliders = new List<Collider>();
     private Transform breathPoint; //위치 벡터 참조 트랜스 폼
     private Transform breathDir; // 방향벡터 참조 트랜스폼
+    [SerializeField] ParticleSystem breathParticle;
     
     public void SetProperty(Transform worldPoint, Transform worldDir)
     {
@@ -24,7 +25,12 @@ public class Breath : MonoBehaviour
     {
         colliders.Clear();
     }
-    
+
+    private void OnEnable()
+    {
+        breathParticle.Play();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -35,6 +41,24 @@ public class Breath : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(colliders.Contains(other)) return;
+
+        if (Player.localPlayer.MainCollider.Equals(other))
+        {
+            var hitPoint = other.ClosestPoint(transform.position);
+            var hitNormal = (transform.position - hitPoint).normalized;
+            
+            CombatEvent combatEvent = new CombatEvent()
+            {
+                Sender = BossMonster.CurrentSceneBossMonster,
+                Receiver = Player.localPlayer,
+                Damage = 1,
+                HitPosition = hitPoint,
+                HitNormal = hitNormal,
+                HitBox = Player.localPlayer.MainCollider.GetComponent<HitBox>()
+            };
+            CombatSystem.Instance.AddCombatEvent(combatEvent);
+            colliders.Add(other);
+        }
         
     }
 }

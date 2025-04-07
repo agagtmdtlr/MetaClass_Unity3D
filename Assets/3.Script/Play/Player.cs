@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private static LocalPlayer _localPlayer;
     public static LocalPlayer localPlayer
     {
         get
         {
-            if (localPlayer == null)
+            if (_localPlayer == null)
             {
-                localPlayer = FindObjectOfType<LocalPlayer>(true);
+                _localPlayer = FindObjectOfType<LocalPlayer>(true);
             }
-            return localPlayer;
+            return _localPlayer;
         }
         set
         {
-            localPlayer = value;
+            _localPlayer = value;
         }
-        
-        
     }
 }

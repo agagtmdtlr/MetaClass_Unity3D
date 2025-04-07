@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Breath : MonoBehaviour
 {
+    
+    GridLayout gridLayout;
     public Collider Collider;
     
     private List<Collider> colliders = new List<Collider>();

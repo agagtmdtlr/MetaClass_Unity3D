@@ -9,7 +9,7 @@ public class AssultRifle : Weapon
 
     private Camera mainCam;
     
-    public WeaponType Type  => WeaponType.AssaultRifle;
+    public override WeaponType Type  => WeaponType.AssaultRifle;
 
 
     // Start is called before the first frame update

@@ -3,23 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponFactory : MonoBehaviour
+public class WeaponFactory : Globalable<WeaponFactory>
 {
-    public static WeaponFactory instance;
-    
     [System.Serializable]
     public struct ItemPreset
     {
-        public Item.ItemType itemType;
+        public Weapon.WeaponType itemType;
         public Weapon prefab;
     }
     public ItemPreset[] itemPresets;
-    Dictionary<Item.ItemType,Weapon> itemDict = new Dictionary<Item.ItemType, Weapon>();
-
-    private void Awake()
-    {
-        instance = this;
-    }
+    Dictionary<Weapon.WeaponType,Weapon> itemDict = new Dictionary<Weapon.WeaponType, Weapon>();
 
     private void Start()
     {
@@ -35,7 +28,7 @@ public class WeaponFactory : MonoBehaviour
         }
     }
 
-    public Weapon Create(Item.ItemType itemType)
+    public Weapon Create(Weapon.WeaponType itemType)
     {
         var sample = itemDict[itemType];
         var weapon = Instantiate(sample,  Vector3.zero, sample.transform.rotation);

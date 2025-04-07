@@ -6,28 +6,22 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class LocalPlayer : Player, IDamagable, ICollector
+public class LocalPlayer : Player, IDamagable
 {
-    public class BaseStat
-    {
-        public int CurrentHp { get; set; }
-    } 
-    public int hp = 100;
-    
     public class Events
     {
         public Action<int,int> OnDamage;
-        public Action<Weapon> OnChangedWeapon;
-        public Action<Weapon> OnStartedChangeWeapon;
-        public Action<Weapon> OnEndedChangeWeapon;
+        public Action<Weapon> OnEquipWeapon;
+        
+        public Action OnStartedChangeWeapon;
+        public Action OnEndedChangeWeapon;
         
         public Action OnStartedReload;
         public Action OnEndedReload;
-        
     }
     
-    public Events events = new Events();
-    BaseStat stat = new BaseStat();
+    public readonly Events events = new Events();
+    public BaseStat stat = new BaseStat();
     
     List<HitBox> hitBoxes = new List<HitBox>();
     
@@ -39,24 +33,25 @@ public class LocalPlayer : Player, IDamagable, ICollector
     private void Awake()
     {
         Player.localPlayer = this;
-        stat.CurrentHp = hp;
-
-        animStateEventListener.OnCallEvent += OnReloaded;
+        stat.CurrentHp = stat.MaxHp;
+        animStateEventListener.OnCallEvent += OnAnimEvent;
     }
     
-    void OnReloaded(string eventName , string parameter)
+    void OnAnimEvent(string eventName , string parameter)
     {
         if (eventName == "Reload")
         {
-            events.OnStartedReload?.Invoke();
             currentWeapon.Reload();
             events.OnEndedReload?.Invoke();
+        }
+        else if( eventName == "Swap")
+        {
+            events.OnEndedChangeWeapon?.Invoke();
         }
     }
 
     private void Start()
     {
-        HpBar.instance.RegisterPlayer(this);
         ChangeHp(0);
         hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
         foreach (var hitbox in hitBoxes)
@@ -83,8 +78,8 @@ public class LocalPlayer : Player, IDamagable, ICollector
     public void ChangeHp(int amount)
     {
         stat.CurrentHp += amount;
-        stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, hp);
-        events.OnDamage?.Invoke(stat.CurrentHp, hp);
+        stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, stat.MaxHp);
+        events.OnDamage?.Invoke(stat.CurrentHp, stat.MaxHp);
     }
     
     void EquipWeapon(Weapon weapon)
@@ -95,8 +90,7 @@ public class LocalPlayer : Player, IDamagable, ICollector
             Destroy(currentWeapon.gameObject);
         }
         
-        
-        events.OnStartedChangeWeapon?.Invoke(currentWeapon);
+        events.OnStartedChangeWeapon?.Invoke();
         currentWeapon = weapon;
         currentWeapon.gameObject.SetActive(true);
         
@@ -104,18 +98,14 @@ public class LocalPlayer : Player, IDamagable, ICollector
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.transform.localRotation = Quaternion.Euler(new Vector3(90,0,0));
 
-        events.OnEndedChangeWeapon?.Invoke(currentWeapon);
-    }
-
-    public void OnRequiredItem(ItemEvent itemEvent)
-    {
-        var weapon = WeaponFactory.instance.Create(itemEvent.Item);
-        EquipWeapon(weapon);
+        events.OnEquipWeapon(currentWeapon);
     }
 
     public void ChangeWeapon(Weapon.WeaponType weaponType)
     {
         Debug.Log($"Change Weapon {weaponType}");
+        var weapon = WeaponFactory.Instance.Create(weaponType);
+        EquipWeapon(weapon);
     }
 
     public void OnTouchedItem(Item.ItemType itemType)
@@ -129,4 +119,5 @@ public class LocalPlayer : Player, IDamagable, ICollector
             ChangeWeapon(Mapper.MapWeapon(itemType));
         }
     }
+
 }

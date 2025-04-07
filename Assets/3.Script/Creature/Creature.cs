@@ -128,7 +128,6 @@ public class Creature : MonoBehaviour , IDamagable
     {
         updateMoveCoroutine = StartCoroutine(UpdateMove());
         updateAttackCoroutine  = StartCoroutine(UpdateAttack());
-        HpBar.instance.RegisterMonster(this);
     }
 
     private IEnumerator UpdateMove()

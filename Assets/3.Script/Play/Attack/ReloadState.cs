@@ -23,13 +23,6 @@ public class ReloadState : PlayerState
 
     public override void Transition()
     {
-        var info = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        if (info.normalizedTime >= 0.77f)
-        {
-            // to local player
-            //playerController.currentWeapon.Reload();
-            playerController.ToAttackState("Attack");
-        }
     }
 
 }

@@ -9,20 +9,16 @@ public class SwapState : PlayerState
     public PlayerController player;
     [SerializeField] private Animator animator;
 
-    private float duration;
     public override string StateType => "Swap";
 
     public override void Enter()
     {
         animator.ResetTrigger(SWAP);
         animator.SetTrigger(SWAP);
-        duration = 1f;
     }
 
     public override void Update()
     {
-        duration -= Time.deltaTime;
-        Transition();
     }
 
     public override void Exit()
@@ -31,7 +27,5 @@ public class SwapState : PlayerState
 
     public override void Transition()
     {
-        if(duration < 0)
-            player.ToAttackState("Attack");
     }
 }

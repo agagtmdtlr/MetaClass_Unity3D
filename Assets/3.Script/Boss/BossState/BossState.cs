@@ -10,12 +10,23 @@ public abstract class BossState : MonoBehaviour
         ScratchState,
         BreathState,
         DeadState,
+        SummonState
     }
 
+    protected Animator Animator { get; private set; }
+    protected BossMonster BossMonster { get; private set; }
+
+    
     public abstract StateName Name { get; }
 
     public string AnimatorStateName;
     public float ExitTime;
+
+    protected void InitializeDefault(BossMonster bossMonster)
+    {
+        Animator = bossMonster.Animator;
+        this.BossMonster = bossMonster;
+    }
     
     public abstract void Initialize(BossMonster bossMonster);
     public abstract void Enter();

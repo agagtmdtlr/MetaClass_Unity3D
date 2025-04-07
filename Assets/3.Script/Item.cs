@@ -16,15 +16,9 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var collector = ItemSystem.Instance.GetCollectorOrNull(other);
-        if (collector is not null)
+        if (Player.localPlayer.MainCollider.Equals(other))
         {
-            ItemEvent evt = new ItemEvent()
-            {
-                Receiver = collector,
-                Item = itemType,
-            };
-            ItemSystem.Instance.AddWeaponEvent(evt);
+            Player.localPlayer.OnTouchedItem(itemType);
             Debug.Log("Item Destroyed");
             Destroy(gameObject);
         }

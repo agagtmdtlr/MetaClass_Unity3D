@@ -11,17 +11,17 @@ public class WeaponUI : MonoBehaviour
     public TMP_Text CurrnetAmmoText;
     public TMP_Text MaxAmmoText;
     
-    private void Start()
+    private void OnEnable()
     {
-        if(PlayerController.CurrentPlayerController == null)
+        if(Player.localPlayer == null)
             Debug.LogWarning("PlayerController is null");
 
-        PlayerController.CurrentPlayerController.PlayerEvents.OnEquipWeapon += UpdateWeapon;
+        Player.localPlayer.events.OnEquipWeapon += UpdateWeapon;
     }
 
     private void OnDisable()
     {
-        PlayerController.CurrentPlayerController.PlayerEvents.OnEquipWeapon -= UpdateWeapon;
+        Player.localPlayer.events.OnEquipWeapon -= UpdateWeapon;
     }
     
     void UpdateWeapon(Weapon weapon)

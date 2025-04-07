@@ -8,14 +8,6 @@ using UnityEngine.Serialization;
 
 public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 {
-    public class BaseStat
-    {
-        public const int HIT_COUNT = 20;
-        public int CurrentHp { get; set; }
-        public int CurrentHitCount { get; set; }
-    }
-    public int hp;
-
     public class Events
     {
         /// <summary>
@@ -28,7 +20,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     public GameObject GameObject => gameObject;
  
-    public readonly BaseStat stat = new BaseStat();
+    [SerializeField] public BaseStat stat = new BaseStat();
     private List<HitBox> hitBoxes;
     
     public Animator Animator { get; private set; }
@@ -65,7 +57,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
     private void Awake()
     {
         Animator = GetComponentInChildren<Animator>();
-        stat.CurrentHp = hp;
+        stat.CurrentHp = stat.MaxHp;
         CurrentSceneBossMonster = this;
 
         BossState[] myState =  gameObject.GetComponentsInChildren<BossState>(true);
@@ -81,7 +73,6 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     private void Start()
     {
-        HpBar.instance.RegisterBoss(this);
         ChangeHp(0);
         hitBoxes = GetComponentsInChildren<HitBox>(true).ToList();
         foreach (var hitbox in hitBoxes)
@@ -148,8 +139,8 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
     public void ChangeHp(int amount)
     {
         stat.CurrentHp += amount;
-        stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, hp);
-        events.OnDamage?.Invoke(stat.CurrentHp, hp);
+        stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, stat.MaxHp);
+        events.OnDamage?.Invoke(stat.CurrentHp, stat.MaxHp);
 
         if (stat.CurrentHp <= 0)
         {

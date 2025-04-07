@@ -10,9 +10,14 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField] Transform[] spawnPoints;
     public float timeBetweenSpawns = 0.5f;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(SpawnRoutine());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     private IEnumerator SpawnRoutine()

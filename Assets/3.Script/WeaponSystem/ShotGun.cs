@@ -17,7 +17,7 @@ public class ShotGun : Weapon
     [Range(0f, 0.5f)] 
     public float HitRange; 
     
-    public WeaponType Type  => WeaponType.Shotgun;
+    public override WeaponType Type  => WeaponType.Shotgun;
     
     void Update()
     {

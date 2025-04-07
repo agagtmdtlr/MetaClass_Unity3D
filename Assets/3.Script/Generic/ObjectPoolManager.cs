@@ -5,7 +5,7 @@ using System.Dynamic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+public class ObjectPoolManager : Globalable<ObjectPoolManager>
 {
     [System.Serializable]
     public class ObjectPoolData
@@ -19,14 +19,8 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Object Pool Data")]
     public ObjectPoolData[] objectPoolDatas;
     
-    public static ObjectPoolManager Instance;
     private Dictionary<string, ObjectPool> poolDict = new Dictionary<string, ObjectPool>();
     
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private void Start()
     {
         foreach (var objPoolData in objectPoolDatas)

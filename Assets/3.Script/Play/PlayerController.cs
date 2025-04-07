@@ -7,19 +7,8 @@ using UnityEngine.Serialization;
 
 public partial class PlayerController : MonoBehaviour
 {
-    
-    public static PlayerController CurrentPlayerController;
-
-    public class Events
-    {
-        public Action<Weapon> OnEquipWeapon;
-    }
-    
-    public readonly Events PlayerEvents = new Events();
-    
     private static readonly int FIRE = Animator.StringToHash("Fire");
     private static readonly int SWAP = Animator.StringToHash("Swap");
-
 
     [Header("Animator")]
     public Animator animator;
@@ -31,11 +20,6 @@ public partial class PlayerController : MonoBehaviour
 
     [SerializeField] private Collider collectCollider;
 
-    private void Awake()
-    {
-        CurrentPlayerController = this;
-    }
-
     private void Start()
     {
         foreach (var stateObj in statesRaw)
@@ -45,7 +29,7 @@ public partial class PlayerController : MonoBehaviour
             state.playerAnimator = animator;
             attckStates[state.StateType] = state;
         }
-        ToAttackState("Attack");
+        PlayAttackAnimation();
     }
 
     public void ToAttackState(string toType)
@@ -64,16 +48,32 @@ public partial class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
+        if(Player.localPlayer == null)
+            Debug.LogWarning($"localPlayer is null");
+        
         Player.localPlayer.events.OnStartedChangeWeapon += PlayChangeWeaponAnimation;
+        Player.localPlayer.events.OnEndedChangeWeapon += PlayAttackAnimation;
+        
         Player.localPlayer.events.OnStartedReload += PlayRelaodAnimation;
+        Player.localPlayer.events.OnEndedReload += PlayAttackAnimation;
+        
     }
 
     private void OnDisable()
     {
         Player.localPlayer.events.OnStartedChangeWeapon -= PlayChangeWeaponAnimation;
+        Player.localPlayer.events.OnEndedChangeWeapon -= PlayAttackAnimation;
+
+        Player.localPlayer.events.OnStartedReload -= PlayRelaodAnimation;
+        Player.localPlayer.events.OnEndedReload -= PlayAttackAnimation;
+    }
+    
+    void PlayAttackAnimation()
+    {
+        ToAttackState("Attack");
     }
 
-    void PlayChangeWeaponAnimation(Weapon weapon)
+    void PlayChangeWeaponAnimation()
     {
         ToAttackState("Swap");
     }

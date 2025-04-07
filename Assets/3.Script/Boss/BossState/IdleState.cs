@@ -7,21 +7,18 @@ using Random = UnityEngine.Random;
 public class IdleState : BossState
 {
     private int[] bossAttacks;
-    private Animator animator;
-    private BossMonster bossMonster;
     
     public override StateName Name => StateName.IdleState;
 
     public override void Initialize(BossMonster bossMonster)
     {
-        this.bossMonster = bossMonster;
-        bossAttacks = new[] { BossMonster.SCRATCH, BossMonster.BREATH };
-        animator = bossMonster.Animator;
+        InitializeDefault(bossMonster);
+        bossAttacks = new[] { BossMonster.SCRATCH, BossMonster.BREATH, BossMonster.SUMMON };
     }
 
     private void Update()
     {
-        var currentState = animator.GetCurrentAnimatorStateInfo(0);
+        var currentState = Animator.GetCurrentAnimatorStateInfo(0);
         if (currentState.IsName(AnimatorStateName) == false) return;
 
         if (currentState.normalizedTime > ExitTime)
@@ -29,8 +26,8 @@ public class IdleState : BossState
             int nextAttackTrigger = Random.Range(0, bossAttacks.Length); // 0 => 스크래치, 1 => 브레스
             nextAttackTrigger = 0;
             int stateValue = nextAttackTrigger + 1; // 1 => 스크래치 상태, 2=> 브레스 상태
-            animator.SetTrigger(bossAttacks[nextAttackTrigger]);
-            bossMonster.ChangeState((StateName)stateValue);
+            Animator.SetTrigger(bossAttacks[nextAttackTrigger]);
+            BossMonster.ChangeState((StateName)stateValue);
         }
     }
     

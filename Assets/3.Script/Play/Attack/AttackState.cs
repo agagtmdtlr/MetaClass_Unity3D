@@ -27,7 +27,6 @@ public class AttackState : PlayerState
 
         if (Input.GetMouseButton(0))
         {
-            //Debug.Log("Trigger Fire");
             bool successFire = weapon.Fire();
             if (successFire)
             {

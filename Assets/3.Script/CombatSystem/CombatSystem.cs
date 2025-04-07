@@ -9,8 +9,6 @@ public class CombatSystem : MonoBehaviour
     
     public class Callbacks
     {
-        // CombatEvent가 발생하면의 의미로 씀
-        public Action<CombatEvent> OnCombatEvent;
         public Action<TakeDamageEvent> OnTakeDamageEvent;
         public Action<DeathEvent> OnDeathEvent;
     }
@@ -37,7 +35,6 @@ public class CombatSystem : MonoBehaviour
         {
             var combatEvent = eventQueue.Dequeue();
             combatEvent.Receiver.TakeDamage(combatEvent);
-            Events.OnCombatEvent?.Invoke(combatEvent);
             processCount++;
         }
 

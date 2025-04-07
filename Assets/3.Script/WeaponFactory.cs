@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemFactory : MonoBehaviour
+public class WeaponFactory : MonoBehaviour
 {
-    public static ItemFactory instance;
+    public static WeaponFactory instance;
     
     [System.Serializable]
     public struct ItemPreset
@@ -14,7 +14,7 @@ public class ItemFactory : MonoBehaviour
         public Weapon prefab;
     }
     public ItemPreset[] itemPresets;
-    Dictionary<Item.ItemType,Weapon > itemDict = new Dictionary<Item.ItemType, Weapon>();
+    Dictionary<Item.ItemType,Weapon> itemDict = new Dictionary<Item.ItemType, Weapon>();
 
     private void Awake()
     {

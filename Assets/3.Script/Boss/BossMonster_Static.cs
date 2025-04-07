@@ -22,4 +22,5 @@ public partial class BossMonster
         }
         return false;
     }
+
 }

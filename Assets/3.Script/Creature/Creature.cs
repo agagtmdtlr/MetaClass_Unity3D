@@ -44,6 +44,9 @@ public class Creature : MonoBehaviour , IDamagable
 
     public Animator animator;
     public NavMeshAgent agent;
+    
+    // TODO: add collider
+    public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
     public Events events = new Events();
     BaseStat stat = new BaseStat();

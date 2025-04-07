@@ -40,7 +40,7 @@ public class ItemSystem : MonoBehaviour
         while (eventQueue.Count > 0 && processCount < MAX_EVENT_PROCESS_COUNT)
         {
             var evtParam = eventQueue.Dequeue();
-            evtParam.Receiver?.GetItem(evtParam);
+            //evtParam.Receiver?.GetItem(evtParam);
             Events.OnGetItem?.Invoke(evtParam);
             processCount++;
         }

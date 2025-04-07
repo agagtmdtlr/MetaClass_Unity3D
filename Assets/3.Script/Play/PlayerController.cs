@@ -5,8 +5,9 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public partial class PlayerController : MonoBehaviour , ICollector
+public partial class PlayerController : MonoBehaviour
 {
+    
     public static PlayerController CurrentPlayerController;
 
     public class Events
@@ -22,13 +23,8 @@ public partial class PlayerController : MonoBehaviour , ICollector
 
     [Header("Animator")]
     public Animator animator;
-    
-    public Weapon currentWeapon;
 
-    [Header("무기 설정")]
     [SerializeField] private GameObject[] statesRaw;
-
-    [SerializeField] private Transform ItemSocket;
     
     private PlayerState currentState;
     private readonly Dictionary<string,PlayerState> attckStates = new Dictionary<string,PlayerState>();
@@ -50,13 +46,7 @@ public partial class PlayerController : MonoBehaviour , ICollector
             attckStates[state.StateType] = state;
         }
         ToAttackState("Attack");
-
-        ItemSystem.Instance.RegisterCollector(collectCollider, this);
-        
     }
-
-
-
 
     public void ToAttackState(string toType)
     {
@@ -71,28 +61,25 @@ public partial class PlayerController : MonoBehaviour , ICollector
         currentState.Enter();
     }
 
-    void EquipWeapon(Weapon weapon)
-    {
-        if (currentWeapon is not null)
-        {
-            Debug.Log($"Destroy {currentWeapon.gameObject.name}");
-            Destroy(currentWeapon.gameObject);
-        }
-        
-        currentWeapon = weapon;
-        currentWeapon.gameObject.SetActive(true);
-        
-        currentWeapon.transform.SetParent(ItemSocket);
-        currentWeapon.transform.localPosition = Vector3.zero;
-        currentWeapon.transform.localRotation = Quaternion.Euler(new Vector3(90,0,0));
 
-        ToAttackState("Swap");
-        PlayerEvents.OnEquipWeapon?.Invoke(currentWeapon);
+    private void OnEnable()
+    {
+        Player.localPlayer.events.OnStartedChangeWeapon += PlayChangeWeaponAnimation;
+        Player.localPlayer.events.OnStartedReload += PlayRelaodAnimation;
     }
 
-    public void GetItem(ItemEvent itemEvent)
+    private void OnDisable()
     {
-        var weapon = ItemFactory.instance.Create(itemEvent.Item);
-        EquipWeapon(weapon);
+        Player.localPlayer.events.OnStartedChangeWeapon -= PlayChangeWeaponAnimation;
+    }
+
+    void PlayChangeWeaponAnimation(Weapon weapon)
+    {
+        ToAttackState("Swap");
+    }
+
+    void PlayRelaodAnimation()
+    {
+        ToAttackState("Reload");
     }
 }

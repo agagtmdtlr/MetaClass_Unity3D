@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICollector
 {
-    public void GetItem(ItemEvent itemEvent);
+    public void OnRequiredItem(ItemEvent itemEvent);
 }

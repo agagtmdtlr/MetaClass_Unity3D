@@ -23,6 +23,7 @@ public enum DamageSurface
 
 public interface IDamagable
 {
+    public Collider MainCollider { get; }
     public GameObject GameObject { get; }
     
     public void TakeDamage(CombatEvent combatEvent);

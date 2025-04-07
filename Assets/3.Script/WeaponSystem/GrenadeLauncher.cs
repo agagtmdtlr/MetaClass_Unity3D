@@ -9,6 +9,8 @@ public class GrenadeLauncher : Weapon
     public Transform grenadeEjectTransform;
     public float force = 10f;
 
+    public WeaponType Type  => WeaponType.GrenadeLauncher;
+
     protected override void Start()
     {
         base.Start();

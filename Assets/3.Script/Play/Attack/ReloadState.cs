@@ -26,7 +26,8 @@ public class ReloadState : PlayerState
         var info = playerAnimator.GetCurrentAnimatorStateInfo(0);
         if (info.normalizedTime >= 0.77f)
         {
-            playerController.currentWeapon.Reload();
+            // to local player
+            //playerController.currentWeapon.Reload();
             playerController.ToAttackState("Attack");
         }
     }

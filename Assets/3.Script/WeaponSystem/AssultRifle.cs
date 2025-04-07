@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class AssultRifle : Weapon
 {
-    
-    
     [Header("Bullet Shell")]
     public Transform shellEjectTransform;
 
     private Camera mainCam;
+    
+    public WeaponType Type  => WeaponType.AssaultRifle;
+
 
     // Start is called before the first frame update
     protected override void Start()

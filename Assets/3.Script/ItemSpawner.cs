@@ -33,6 +33,20 @@ public class ItemSpawner : MonoBehaviour
             var spawnItem = Instantiate(selectedItem, spawnPosition, selectedTransform.rotation);
         }
     }
-    
+
+    private void OnRequriedItem(Item.ItemType itemType)
+    {
+        switch (itemType)
+        {
+            case Item.ItemType.AssaultRifle:
+                break;
+            case Item.ItemType.GrenadeLauncher:
+                break;
+            case Item.ItemType.Shotgun:
+                break;
+            default:
+                break;
+        }
+    }
 
 }

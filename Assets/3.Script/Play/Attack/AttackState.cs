@@ -21,13 +21,14 @@ public class AttackState : PlayerState
 
     private void UpdateInput()
     {
-        if (playerController.currentWeapon is null)
+        var weapon = Player.localPlayer.currentWeapon;
+        if (weapon is null)
             return;
 
         if (Input.GetMouseButton(0))
         {
             //Debug.Log("Trigger Fire");
-            bool successFire = playerController.currentWeapon.Fire();
+            bool successFire = weapon.Fire();
             if (successFire)
             {
                 //Debug.Log("Success Fire");
@@ -44,7 +45,8 @@ public class AttackState : PlayerState
 
     public override void Transition()
     {
-        if (playerController.currentWeapon is null)
+        var weapon = Player.localPlayer.currentWeapon;
+        if (weapon is null)
             return;
 
         if (Input.GetKeyDown(KeyCode.R))

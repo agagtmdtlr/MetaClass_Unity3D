@@ -5,6 +5,14 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    public enum WeaponType
+    {
+        Unknown,
+        AssaultRifle,
+        GrenadeLauncher,
+        Shotgun
+    }
+    
     public class Events
     {
         public Action<int> OnChangeAmmo;
@@ -14,6 +22,7 @@ public abstract class Weapon : MonoBehaviour
     
     [Header("Gun Data")]
     public GunData data;
+    public WeaponType Type { get; }
     
     [Header("Bullet Data")]
     [SerializeField] Bullet bulletSample;

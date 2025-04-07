@@ -41,6 +41,9 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     private List<IDamagable> hittedDamagables = new List<IDamagable>();
 
+    public Collider MainCollider => bodyCollider;
+    [SerializeField] private Collider bodyCollider;
+
     public void BeginAttack()
     {
         hittedDamagables.Clear();

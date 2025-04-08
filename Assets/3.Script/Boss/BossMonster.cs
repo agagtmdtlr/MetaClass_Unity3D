@@ -16,11 +16,19 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         public Action<int,int> OnDamage;
         public Action<BossState.StateName> OnChangedState;
     }
+
+    public class BossStat : BaseStat
+    {
+        public const int HIT_COUNT = 20;
+
+        public int CurrentHitCount { get; set; }
+    }
+    
     public readonly Events events = new Events();
 
     public GameObject GameObject => gameObject;
  
-    [SerializeField] public BaseStat stat = new BaseStat();
+    [SerializeField] public BossStat stat = new BossStat();
     private List<HitBox> hitBoxes;
     
     public Animator Animator { get; private set; }
@@ -141,7 +149,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         else
         {
             stat.CurrentHitCount++;
-            if (stat.CurrentHitCount >= BaseStat.HIT_COUNT)
+            if (stat.CurrentHitCount >= BossStat.HIT_COUNT)
             {
                 stat.CurrentHitCount = 0;
                 Animator.SetTrigger(HIT);

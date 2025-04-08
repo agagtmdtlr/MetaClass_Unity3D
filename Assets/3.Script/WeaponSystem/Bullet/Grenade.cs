@@ -38,15 +38,13 @@ public class Grenade : Bullet
             HitBox hitbox = coll.GetComponent<HitBox>();
             if (hitbox is not null)
             {
-                var hitPoint = hitbox.HitCollider.ClosestPoint(transform.position);
-                var hitNormal = (hitPoint - hitbox.HitCollider.bounds.center).normalized;
+                hitbox.GetHitPositionAndNormal(transform.position, out Vector3 hitPoint, out Vector3 hitNormal);
                 var monster= CombatSystem.Instance.GetMonsterOrNull(hitbox);
                 
                 CombatEvent combatEvent = new CombatEvent()
                 {
                     HitBox =  hitbox,
-                    Damage = Damage,
-                    Sender = Player.localPlayer,
+                    Sender = this,
                     Receiver = monster,
                     HitPosition = hitPoint,
                     HitNormal = hitNormal

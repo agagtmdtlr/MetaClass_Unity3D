@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssultRifle : Weapon
+public class AssultRifle : Weapon 
 {
     [Header("Bullet Shell")]
     public Transform shellEjectTransform;
@@ -62,9 +62,8 @@ public class AssultRifle : Weapon
             {
                 CombatEvent combatEvent = new CombatEvent
                 {
-                    Sender = Player.localPlayer,
+                    Sender = this,
                     Receiver = enemy,
-                    Damage = data.damage,
                     HitPosition = hit.point,
                     HitNormal = hit.normal,
                     HitBox = hitBox

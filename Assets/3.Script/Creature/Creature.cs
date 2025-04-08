@@ -186,7 +186,7 @@ public class Creature : MonoBehaviour , IDamagable
             return; // already death do noting
         }
         
-        var damage =combatEvent.Damage;
+        var damage =combatEvent.Sender.Damage;
         switch (combatEvent.HitBox.DamageArea)
         {
             case DamageArea.Head:

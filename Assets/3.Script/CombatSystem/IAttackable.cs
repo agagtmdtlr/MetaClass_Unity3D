@@ -4,8 +4,5 @@ using UnityEngine;
 
 public interface IAttackable
 {
-    public void BeginAttack();
-    
-    public void AddHitted(IDamagable target);
-    public bool IsHitted(IDamagable damagable);
+    public int Damage { get; }
 }

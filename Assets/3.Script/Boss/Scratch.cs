@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scratch : MonoBehaviour
+public class Scratch : MonoBehaviour , IAttackable
 {
-    [SerializeField] int Damage = 1;
-    
+    public int Damage => 1;
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Collided with " + other.gameObject.name);
@@ -15,22 +14,17 @@ public class Scratch : MonoBehaviour
             return;
 
         var target = CombatSystem.Instance.GetMonsterOrNull(hitBox);
-        if (BossMonster.CurrentSceneBossMonster.IsHitted(target))
-            return;
         
-        BossMonster.CurrentSceneBossMonster.AddHitted(target);
-        
-        var hitPoint = hitBox.HitCollider.ClosestPoint(transform.position);
-        var hitNormal = (hitPoint - hitBox.HitCollider.bounds.center).normalized;
+        hitBox.GetHitPositionAndNormal(transform.position, out Vector3 hitPoint, out Vector3 hitNormal);
         CombatEvent evt = new CombatEvent()
         {
-            Damage = Damage,
             HitBox = hitBox,
-            Sender = BossMonster.CurrentSceneBossMonster,
+            Sender = this,
             Receiver = target,
             HitPosition = hitPoint,
             HitNormal = hitNormal
         };
         CombatSystem.Instance.AddCombatEvent(evt);
     }
+
 }

@@ -13,6 +13,12 @@ public abstract class HitBox : MonoBehaviour
     public DamageArea DamageArea => damageArea;
     public DamageSurface DamageSurface => damageSurface;
     
+    public void GetHitPositionAndNormal(Vector3 hitPoint, out Vector3 hitPosition, out Vector3 hitNormal)
+    {
+        hitPosition = hitCollider.ClosestPoint(hitPoint);
+        hitNormal = (hitPosition - hitCollider.bounds.center).normalized;
+    }
+    
     private void Awake()
     {
         hitCollider = GetComponent<Collider>();

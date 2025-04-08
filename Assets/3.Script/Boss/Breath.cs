@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Breath : MonoBehaviour
+public class Breath : MonoBehaviour , IAttackable
 {
     
     GridLayout gridLayout;
@@ -49,9 +49,8 @@ public class Breath : MonoBehaviour
             
             CombatEvent combatEvent = new CombatEvent()
             {
-                Sender = BossMonster.CurrentSceneBossMonster,
+                Sender = this,
                 Receiver = Player.localPlayer,
-                Damage = 1,
                 HitPosition = hitPoint,
                 HitNormal = hitNormal,
                 HitBox = Player.localPlayer.MainCollider.GetComponent<HitBox>()
@@ -61,4 +60,6 @@ public class Breath : MonoBehaviour
         }
         
     }
+
+    public int Damage => 1;
 }

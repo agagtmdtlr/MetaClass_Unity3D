@@ -124,12 +124,6 @@ public class CombatSystem : MonoBehaviour
             return false;
         }
 
-        if (combatEvent.Damage <= 0)
-        {
-            Debug.LogWarning("Damage가 0 이하입니다.");
-            return false;
-        }
-
         return true;
     }
 }

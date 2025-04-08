@@ -6,7 +6,7 @@ using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
+public partial class BossMonster : MonoBehaviour , IDamagable
 {
     public class Events
     {
@@ -41,18 +41,6 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
         hittedDamagables.Clear();
     }
 
-    public void AddHitted(IDamagable target)
-    {
-        hittedDamagables.Add(target);
-    }
-    public bool IsHitted(IDamagable damagable)
-    {
-        if (hittedDamagables.Contains(damagable))
-        {
-            return true;
-        }
-        return false;
-    }
 
     private void Awake()
     {
@@ -92,7 +80,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable , IAttackable
 
     public void TakeDamage(CombatEvent combatEvent)
     {
-        var damage =combatEvent.Damage;
+        var damage =combatEvent.Sender.Damage;
         switch (combatEvent.HitBox.DamageArea)
         {
             case DamageArea.Head:

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour , IAttackable
 {
     public enum WeaponType
     {
@@ -22,6 +22,7 @@ public abstract class Weapon : MonoBehaviour
     
     [Header("Gun Data")]
     public GunData data;
+    public int Damage => data.damage;
 
     public virtual WeaponType Type => WeaponType.Unknown;
     
@@ -121,4 +122,5 @@ public abstract class Weapon : MonoBehaviour
     {
         bulletPool.Return(bullet);
     }
+
 }

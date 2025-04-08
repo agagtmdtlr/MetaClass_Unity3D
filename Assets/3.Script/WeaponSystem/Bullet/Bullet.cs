@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public abstract class Bullet : MonoBehaviour , IObjectPoolItem
+public abstract class Bullet : MonoBehaviour , IObjectPoolItem , IAttackable
 {
     public Weapon weapon;
     

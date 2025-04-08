@@ -72,7 +72,7 @@ public class LocalPlayer : Player, IDamagable
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log("Hit Player");
-        ChangeHp(-combatEvent.Damage);
+        ChangeHp(-combatEvent.Sender.Damage);
     }
 
     public void ChangeHp(int amount)

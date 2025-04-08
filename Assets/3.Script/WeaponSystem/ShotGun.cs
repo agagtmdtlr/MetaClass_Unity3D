@@ -53,9 +53,8 @@ public class ShotGun : Weapon
                 {
                     CombatEvent combatEvent = new CombatEvent
                     {
-                        Sender = Player.localPlayer,
+                        Sender = this,
                         Receiver = enemy,
-                        Damage = data.damage,
                         HitPosition = hit.point,
                         HitNormal = hit.normal,
                         HitBox = hitBox

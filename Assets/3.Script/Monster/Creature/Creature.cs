@@ -2,9 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -48,6 +45,7 @@ public class Creature : MonoBehaviour , IDamagable
     // TODO: add collider
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
+    public Type DamageableType => typeof(Creature);
     public Events events = new Events();
     BaseStat stat = new BaseStat();
     
@@ -216,7 +214,7 @@ public class Creature : MonoBehaviour , IDamagable
         
         stat.hp -= damage;
         stat.hp = Mathf.Clamp(stat.hp, 0, stat.hp);
-        events.OnDamage?.Invoke(stat.hp, stat.hp);
+        events.OnDamage?.Invoke(stat.hp, stat.hp);  
 
 
         if (stat.hp <= 0)

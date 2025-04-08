@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TreeEditor;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.WSA;
 using Random = UnityEngine.Random;
 
 public class ShotGun : Weapon

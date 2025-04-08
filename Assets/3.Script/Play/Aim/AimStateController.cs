@@ -19,7 +19,19 @@ public class AimStateController : MonoBehaviour
         Cursor.visible = false;
         
         initialCameraRotation = cameraTransform.localRotation;
+        
+        CombatSystem.Instance.Events.OnDeathEvent += onEndedGame;
     }
+
+    private void onEndedGame(DeathEvent deathEvent)
+    {
+        if (deathEvent.Dead.DamageableType == typeof(LocalPlayer)
+            || deathEvent.Dead.DamageableType == typeof(BossMonster))
+        {
+            enabled = false;
+        }
+    }
+    
 
     private void Update()
     {

@@ -4847,6 +4847,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc689e1b82d05b24fa9f6ad4ded4d3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0, z: 0}
+  destination: {x: 0, y: 0, z: 0}
+  speed: 10
 --- !u!135 &1916686749781934962
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4967,7 +4970,7 @@ PrefabInstance:
     - target: {fileID: 942839059677913310, guid: fb22a1c3798dae748a79ceb8712bad55,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1600008
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 942839059677913310, guid: fb22a1c3798dae748a79ceb8712bad55,
         type: 3}

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -60,15 +59,17 @@ public class LocalPlayer : Player, IDamagable
         }
         CombatSystem.Instance.Events.OnDeathEvent += OnDeathEvent;
     }
-    
+
     private void OnDeathEvent(DeathEvent obj)
     {
         ChangeHp(5);
     }
 
-    public Collider MainCollider => collider;
-    [SerializeField] private Collider collider;
+    public Collider MainCollider => characterController;
+    [SerializeField] private CharacterController characterController;
     public GameObject GameObject => gameObject;
+    public Type DamageableType => typeof(LocalPlayer);
+
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log("Hit Player");
@@ -80,6 +81,16 @@ public class LocalPlayer : Player, IDamagable
         stat.CurrentHp += amount;
         stat.CurrentHp = Mathf.Clamp(stat.CurrentHp, 0, stat.MaxHp);
         events.OnDamage?.Invoke(stat.CurrentHp, stat.MaxHp);
+
+        if (stat.CurrentHp <= 0)
+        {
+            DeathEvent deathEvent = new DeathEvent()
+            {
+                Dead = this,
+                DeathPosition = transform.position
+            };
+            CombatSystem.Instance.AddGameEvent(deathEvent);
+        }
     }
     
     void EquipWeapon(Weapon weapon)

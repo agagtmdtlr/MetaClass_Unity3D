@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,8 @@ public interface IDamagable
 {
     public Collider MainCollider { get; }
     public GameObject GameObject { get; }
+    
+    public Type DamageableType { get; }
     
     public void TakeDamage(CombatEvent combatEvent);
    

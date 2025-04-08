@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -28,7 +27,8 @@ public partial class BossMonster : MonoBehaviour , IDamagable
     public readonly Events events = new Events();
 
     public GameObject GameObject => gameObject;
- 
+    public Type DamageableType => typeof(BossMonster);
+
     [SerializeField] public BossStat stat = new BossStat();
     private List<HitBox> hitBoxes;
     
@@ -146,6 +146,13 @@ public partial class BossMonster : MonoBehaviour , IDamagable
             Animator.ResetTrigger(BREATH);
             Animator.ResetTrigger(HIT);
             Animator.SetTrigger(DEAD);
+
+            DeathEvent deathEvent = new DeathEvent()
+            {
+                Dead = this,
+                DeathPosition = transform.position
+            };
+            CombatSystem.Instance.AddGameEvent(deathEvent);
         }
         else
         {

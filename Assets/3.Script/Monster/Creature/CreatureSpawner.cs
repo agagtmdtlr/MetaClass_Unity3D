@@ -10,14 +10,6 @@ public class CreatureSpawner : MonoBehaviour
     [SerializeField] Transform[] spawnPoints;
     public float timeBetweenSpawns = 0.5f;
 
-    private void OnEnable()
-    {
-    }
-
-    private void OnDisable()
-    {
-    }
-
     public void Spawn()
     {
         for (int i = 0; i < spawnPoints.Length; i++)

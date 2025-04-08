@@ -21,13 +21,13 @@ public class IdleState : BossState
         var currentState = Animator.GetCurrentAnimatorStateInfo(0);
         if (currentState.IsName(AnimatorStateName) == false) return;
 
-        /*if (currentState.normalizedTime > ExitTime)
+        if (currentState.normalizedTime > ExitTime)
         {
             int nextAttackTrigger = Random.Range(0, bossAttacks.Length); // 0 => 스크래치, 1 => 브레스
             int stateValue = nextAttackTrigger + 1; // 1 => 스크래치 상태, 2=> 브레스 상태
             Animator.SetTrigger(bossAttacks[nextAttackTrigger]);
             Context.ChangeState((StateName)stateValue);
-        }*/
+        }
     }
     
     public override void Enter()

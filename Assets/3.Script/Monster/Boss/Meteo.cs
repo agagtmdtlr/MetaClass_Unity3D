@@ -52,6 +52,7 @@ public class Meteo : MonoBehaviour , IAttackable
                 HitPosition = hitPoint,
                 HitNormal = hitNormal
             };
+            CombatSystem.Instance.AddGameEvent(combatEvent);
             Explosion();
         }
     }

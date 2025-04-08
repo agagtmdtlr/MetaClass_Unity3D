@@ -212,7 +212,7 @@ public class Creature : MonoBehaviour , IDamagable
             HitNormal = combatEvent.HitNormal,
             HitBox = combatEvent.HitBox
         };
-        CombatSystem.Instance.AddTakeDamageEvent(evt);
+        CombatSystem.Instance.AddGameEvent(evt);
         
         stat.hp -= damage;
         stat.hp = Mathf.Clamp(stat.hp, 0, stat.hp);
@@ -238,7 +238,7 @@ public class Creature : MonoBehaviour , IDamagable
             Dead = this,
             DeathPosition = transform.position
         };
-        CombatSystem.Instance.AddDeathEvent(evt);
+        CombatSystem.Instance.AddGameEvent(evt);
     }
 
     private void OnEndDeath()

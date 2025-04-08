@@ -68,7 +68,7 @@ public class AssultRifle : Weapon
                     HitNormal = hit.normal,
                     HitBox = hitBox
                 };
-                CombatSystem.Instance.AddCombatEvent(combatEvent);
+                CombatSystem.Instance.AddGameEvent(combatEvent);
             }
         }
         

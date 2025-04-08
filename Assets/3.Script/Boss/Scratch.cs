@@ -24,7 +24,7 @@ public class Scratch : MonoBehaviour , IAttackable
             HitPosition = hitPoint,
             HitNormal = hitNormal
         };
-        CombatSystem.Instance.AddCombatEvent(evt);
+        CombatSystem.Instance.AddGameEvent(evt);
     }
 
 }

@@ -55,7 +55,7 @@ public class Breath : MonoBehaviour , IAttackable
                 HitNormal = hitNormal,
                 HitBox = Player.localPlayer.MainCollider.GetComponent<HitBox>()
             };
-            CombatSystem.Instance.AddCombatEvent(combatEvent);
+            CombatSystem.Instance.AddGameEvent(combatEvent);
             colliders.Add(other);
         }
         

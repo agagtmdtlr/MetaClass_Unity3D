@@ -49,7 +49,7 @@ public class Grenade : Bullet
                     HitPosition = hitPoint,
                     HitNormal = hitNormal
                 };
-                CombatSystem.Instance.AddCombatEvent(combatEvent);
+                CombatSystem.Instance.AddGameEvent(combatEvent);
             }
         }
         var explosion = ObjectPoolManager.Instance.GetObjectOrNull("Explosion") as ParticleEffect;

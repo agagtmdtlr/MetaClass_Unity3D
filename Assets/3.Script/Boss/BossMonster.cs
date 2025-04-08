@@ -17,6 +17,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable
         public Action<BossState.StateName> OnChangedState;
     }
 
+    [System.Serializable]
     public class BossStat : BaseStat
     {
         public const int HIT_COUNT = 20;
@@ -114,7 +115,7 @@ public partial class BossMonster : MonoBehaviour , IDamagable
             HitNormal = combatEvent.HitNormal,
             HitBox = combatEvent.HitBox
         };
-        CombatSystem.Instance.AddTakeDamageEvent(evt);
+        CombatSystem.Instance.AddGameEvent(evt);
         ChangeHp(-damage);
     }
 

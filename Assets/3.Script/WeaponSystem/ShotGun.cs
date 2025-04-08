@@ -59,7 +59,7 @@ public class ShotGun : Weapon
                         HitNormal = hit.normal,
                         HitBox = hitBox
                     };
-                    CombatSystem.Instance.AddCombatEvent(combatEvent);
+                    CombatSystem.Instance.AddGameEvent(combatEvent);
                 }
             }
         }
